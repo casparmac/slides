@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bitastad - KI for deg</title>
+<title>Bitastad &#8212; KI-strategi</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700&family=Epilogue:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+
 * { margin:0; padding:0; box-sizing:border-box; }
 
 :root {
@@ -431,9 +432,783 @@ body {
 .story:nth-child(4){ animation-delay:.16s }
 .story:nth-child(5){ animation-delay:.20s }
 .story:nth-child(6){ animation-delay:.24s }
+
+
+/* ===== GLOBAL NAV ===== */
+.global-nav {
+  background: #111111;
+  padding: 0 52px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border-bottom: 1px solid #222;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  padding: 16px 32px 16px 0;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.nav-logo strong { color: rgba(255,255,255,0.7); }
+
+.nav-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  color: rgba(255,255,255,0.35);
+  padding: 0 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color 0.15s, border-bottom 0.15s;
+  border-bottom: 2px solid transparent;
+  line-height: 1;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-btn:hover { color: rgba(255,255,255,0.65); }
+.nav-btn.active { color: #ffffff; border-bottom: 2px solid #ffffff; }
+
+/* ===== PAGE SYSTEM ===== */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ===== FORSIDE SPECIFIC ===== */
+
+/* Argument grid */
+.arg-section {
+  padding: 60px 52px 72px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.arg-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+
+.arg-col-head {
+  background: var(--ink);
+  padding: 16px 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.5);
+}
+
+.arg-col-head.for { color: rgba(255,255,255,0.7); }
+
+.arg-item {
+  background: white;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--rule-light);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.arg-item:last-child { border-bottom: none; }
+
+.arg-index {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--rule);
+  padding-top: 2px;
+  line-height: 1;
+}
+
+.arg-body {}
+
+.arg-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 5px;
+  line-height: 1.2;
+}
+
+.arg-desc {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.55;
+}
+
+/* SUKSESS + RISIKO */
+.two-col-section {
+  padding: 60px 52px 72px;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 52px;
+}
+
+.col-head {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--sub);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.criterion-item {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--rule-light);
+}
+
+.criterion-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.criterion-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--sub);
+  margin-bottom: 5px;
+}
+
+.criterion-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 5px;
+  line-height: 1.2;
+}
+
+.criterion-desc {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.55;
+}
+
+/* Risk items */
+.risk-item {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--rule-light);
+}
+
+.risk-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.risk-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.risk-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 3px 7px;
+  border: 1px solid var(--rule);
+  color: var(--sub);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 3px;
+  line-height: 1.2;
+}
+
+.risk-badge.high {
+  border-color: #ccc;
+  color: #555;
+  background: #f8f8f8;
+}
+
+.risk-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.risk-desc {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+
+.risk-mitigation {
+  font-size: 12px;
+  color: var(--sub);
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-left: 2px solid var(--rule);
+  background: #fafafa;
+}
+
+.risk-mitigation strong {
+  color: var(--mid);
+  font-weight: 600;
+}
+
+/* FORUTSETNINGER */
+.prereq-section {
+  padding: 60px 52px 72px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.prereq-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-bottom: 40px;
+}
+
+.prereq-card {
+  background: white;
+  padding: 24px 22px;
+}
+
+.prereq-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--sub);
+  margin-bottom: 8px;
+}
+
+.prereq-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.prereq-desc {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.55;
+  margin-bottom: 10px;
+}
+
+.prereq-how {
+  font-size: 12px;
+  color: var(--sub);
+  line-height: 1.5;
+  padding: 8px 12px;
+  background: #fafafa;
+  border-left: 2px solid var(--rule);
+}
+
+.prereq-how strong {
+  color: var(--mid);
+  font-weight: 600;
+}
+
+/* LOGIC CHAIN */
+.logic-chain {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--rule);
+  margin-top: 0;
+}
+
+.logic-step {
+  flex: 1;
+  padding: 20px 18px;
+  border-right: 1px solid var(--rule);
+  position: relative;
+}
+
+.logic-step:last-child { border-right: none; }
+
+.logic-step-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--sub);
+  margin-bottom: 6px;
+}
+
+.logic-step-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.logic-step-desc {
+  font-size: 11px;
+  color: var(--sub);
+  line-height: 1.5;
+}
+
+.logic-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 2px;
+  color: var(--rule);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* FORSIDE HERO specifics */
+.forside-kpi-bar {
+  background: var(--ink);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid #222;
+}
+
+.kpi-block {
+  padding: 28px 32px;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+.kpi-block:last-child { border-right: none; }
+
+.kpi-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.kpi-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.3);
+  line-height: 1.4;
+}
+
+.kpi-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.2);
+  margin-top: 4px;
+}
+
+/* Section intro shared */
+.section-intro-block {
+  margin-bottom: 36px;
+}
+
+.sec-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: var(--sub);
+  margin-bottom: 10px;
+}
+
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.sec-desc {
+  font-size: 15px;
+  color: var(--sub);
+  font-weight: 300;
+  max-width: 640px;
+  line-height: 1.65;
+}
+
 </style>
 </head>
 <body>
+
+<!-- GLOBAL NAV -->
+<nav class="global-nav">
+  <div class="nav-logo"><strong>Bitastad</strong>&nbsp;&nbsp;KI-strategi</div>
+  <button class="nav-btn active" onclick="showPage('forside', this)">Forside</button>
+  <button class="nav-btn" onclick="showPage('personas', this)">KI for deg</button>
+</nav>
+
+<!-- =====================================================
+     PAGE: FORSIDE
+     ===================================================== -->
+<div class="page active" id="page-forside">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-eyebrow">Strategisk grunnlag</div>
+      <h1>Hvorfor KI er<br><em>forutsetningen</em><br>for vekst</h1>
+      <p class="hero-desc">Bitastad skal doble antall lokasjoner fra 159 til 300+ uten at HQ-kostnadene vokser proporsjonalt. Det er ikke mulig uten kunstig intelligens som skaleringsmotor i hvert ledd av virksomheten.</p>
+    </div>
+    <div class="hero-stat-block">
+      <div class="hero-stat">2x</div>
+      <div class="hero-stat-label">Vekstmal &#183; 159 &#8594; 300+</div>
+    </div>
+  </div>
+
+  <!-- KPI BAR -->
+  <div class="forside-kpi-bar">
+    <div class="kpi-block">
+      <div class="kpi-val">159</div>
+      <div class="kpi-label">Lokasjoner i dag</div>
+      <div class="kpi-sub">Mal: 300+ innen 2028</div>
+    </div>
+    <div class="kpi-block">
+      <div class="kpi-val">90</div>
+      <div class="kpi-label">Ansatte pa HQ</div>
+      <div class="kpi-sub">Kan ikke dobles med lokasjoner</div>
+    </div>
+    <div class="kpi-block">
+      <div class="kpi-val">1,4B</div>
+      <div class="kpi-label">Omsetning 2025</div>
+      <div class="kpi-sub">Inkl. franchise</div>
+    </div>
+    <div class="kpi-block">
+      <div class="kpi-val">~2400</div>
+      <div class="kpi-label">Medarbeidere</div>
+      <div class="kpi-sub">Hoy turnover krever smart HR</div>
+    </div>
+  </div>
+
+  <!-- ARGUMENTER FOR/MOT -->
+  <div class="arg-section">
+    <div class="section-intro-block">
+      <div class="sec-kicker">Argumentanalyse</div>
+      <div class="sec-title">For og mot KI som vekststrategi</div>
+      <p class="sec-desc">En &#230;rlig vurdering av hvorfor KI er n&#248;dvendig &#8212; og hvilke innvendinger ledelsen m&#229; ta p&#229; alvor.</p>
+    </div>
+
+    <div class="arg-grid">
+
+      <!-- HEADER ROW -->
+      <div class="arg-col-head for">For &#8212; Argumenter for KI-investering</div>
+      <div class="arg-col-head">Mot &#8212; Innvendinger og motargumenter</div>
+
+      <!-- ROW 1 -->
+      <div class="arg-item">
+        <div class="arg-index">01</div>
+        <div class="arg-body">
+          <div class="arg-title">HQ kan ikke skalere lineert</div>
+          <div class="arg-desc">90 medarbeidere p&#229; servicekontoret kan ikke vokse til 180 for &#229; betjene 300 lokasjoner. KI er den eneste m&#229;ten &#229; skalere kapasitet uten tilsvarende kostnadsvekst i staben.</div>
+        </div>
+      </div>
+      <div class="arg-item">
+        <div class="arg-index">01</div>
+        <div class="arg-body">
+          <div class="arg-title">KI krever data vi ikke har</div>
+          <div class="arg-desc">Gode KI-modeller krever strukturert og ren data over tid. Bitastad m&#229; investere i datakvalitet f&#248;r KI gir full effekt &#8212; noe som tar tid og koster penger.</div>
+        </div>
+      </div>
+
+      <!-- ROW 2 -->
+      <div class="arg-item">
+        <div class="arg-index">02</div>
+        <div class="arg-body">
+          <div class="arg-title">Vertikal integrasjon gir unikt datagrunnlag</div>
+          <div class="arg-desc">Bitastad eier hele kjeden fra Matmegleren til gjesten. Det gir et datagrunnlag fra grossist til kassaapparat som konkurrenter ikke har, og som KI kan utnytte fullt ut.</div>
+        </div>
+      </div>
+      <div class="arg-item">
+        <div class="arg-index">02</div>
+        <div class="arg-body">
+          <div class="arg-title">Implementering tar lengre tid enn planlagt</div>
+          <div class="arg-desc">KI-prosjekter er notorisk kjent for forsinkelser. Dersom vekstplanen er koblet til KI-leveranser som g&#229;r sent, kan &#229;pningsplanen m&#229;tte utsettes.</div>
+        </div>
+      </div>
+
+      <!-- ROW 3 -->
+      <div class="arg-item">
+        <div class="arg-index">03</div>
+        <div class="arg-body">
+          <div class="arg-title">Konkurrentene er allerede i gang</div>
+          <div class="arg-desc">St&#248;rre internasjonale kjeder som McDonald's og Starbucks har investert tungt i KI de siste &#229;rene. Vent-og-se er ikke et noy&#248;tralt valg &#8212; det er et valg om &#229; tape terreng.</div>
+        </div>
+      </div>
+      <div class="arg-item">
+        <div class="arg-index">03</div>
+        <div class="arg-body">
+          <div class="arg-title">Organisasjonen er ikke klar</div>
+          <div class="arg-desc">KI krever endret arbeidsm&#229;te, nye ferdigheter og vilje til &#229; stole p&#229; algoritmer. Motstand i organisasjonen &#8212; s&#230;rlig blant daglige ledere &#8212; kan undergrave gevinstene.</div>
+        </div>
+      </div>
+
+      <!-- ROW 4 -->
+      <div class="arg-item">
+        <div class="arg-index">04</div>
+        <div class="arg-body">
+          <div class="arg-title">Svinnet alene forsvarer investeringen</div>
+          <div class="arg-desc">En reduksjon p&#229; 20% matsvinn p&#229; tvers av 300 lokasjoner tilsvarer titalls millioner kroner &#229;rlig. Det alene gir rask ROI p&#229; en KI-investering i Matmegleren og k&#248;kkenprognoser.</div>
+        </div>
+      </div>
+      <div class="arg-item">
+        <div class="arg-index">04</div>
+        <div class="arg-body">
+          <div class="arg-title">Franchise-modellen kompliserer KI-utrulling</div>
+          <div class="arg-desc">Franchisetakere er selvstendige og kan nekte &#229; ta i bruk systemer de oppfatter som kontroll eller merarbeid. KI-l&#248;sninger m&#229; selges inn &#8212; ikke bare p&#229;legges.</div>
+        </div>
+      </div>
+
+      <!-- ROW 5 -->
+      <div class="arg-item">
+        <div class="arg-index">05</div>
+        <div class="arg-body">
+          <div class="arg-title">KI l&#248;ser den h&#248;ye turnoveren i bransjen</div>
+          <div class="arg-desc">Serveringsbransjen har bransjens h&#248;yeste personalgjennomtrekk. KI kan forutse hvem som er i ferd med &#229; slutte, effektivisere rekruttering og gj&#248;re onboarding skalerbar &#8212; et kronisk problem som KI adresserer direkte.</div>
+        </div>
+      </div>
+      <div class="arg-item">
+        <div class="arg-index">05</div>
+        <div class="arg-body">
+          <div class="arg-title">KI erstatter ikke godt lederskap</div>
+          <div class="arg-desc">En god daglig leder med lokalkunnskap sl&#229;r en gjennomsnittlig algoritme p&#229; de fleste operasjonelle beslutninger. KI er et supplement &#8212; ikke en erstatning for sterk driftskultur.</div>
+        </div>
+      </div>
+
+      <!-- ROW 6 -->
+      <div class="arg-item">
+        <div class="arg-index">06</div>
+        <div class="arg-body">
+          <div class="arg-title">KI er ikke l&#230;ngre eksperimentelt &#8212; det er tilgjengelig</div>
+          <div class="arg-desc">Teknologien er moden, leverand&#248;rene er p&#229; plass, og l&#248;sningene kan implementeres trinnvis. Bitastad trenger ikke vente p&#229; en perfekt KI-strategi &#8212; de kan starte med h&#248;y-impact use cases i dag.</div>
+        </div>
+      </div>
+      <div class="arg-item">
+        <div class="arg-index">06</div>
+        <div class="arg-body">
+          <div class="arg-title">Personvern og regulatoriske krav</div>
+          <div class="arg-desc">KI som bruker personaldata &#8212; for turnover-predikasjon eller rekruttering &#8212; m&#229; v&#230;re i samsvar med GDPR og arbeidsmilj&#248;loven. Feil her kan gi b&#229;de b&#248;ter og tillitsskade.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUKSESSKRITERIER + RISIKO -->
+  <div class="two-col-section">
+
+    <!-- SUKSESSKRITERIER -->
+    <div>
+      <div class="col-head">Topp 6 suksesskriterier</div>
+
+      <div class="criterion-item">
+        <div class="criterion-num">01</div>
+        <div class="criterion-title">Datakvalitet er p&#229; plass f&#248;rst</div>
+        <div class="criterion-desc">KI er ikke bedre enn dataen den trenes p&#229;. Bitastad m&#229; sikre at salgsdata, lagerdata og HR-data er rene, strukturerte og tilgjengelige p&#229; tvers av alle systemer &#8212; f&#248;r KI-prosjekter starter.</div>
+      </div>
+
+      <div class="criterion-item">
+        <div class="criterion-num">02</div>
+        <div class="criterion-title">Ledelsen eier KI-satsingen</div>
+        <div class="criterion-desc">KI-prosjekter som er IT-prosjekter mislykkes. De m&#229; eies av forretningsledelsen, ha klar sponsor p&#229; toppen, og v&#230;re koblet til vekstm&#229;lene &#8212; ikke behandles som et digitaliseringstiltak p&#229; siden.</div>
+      </div>
+
+      <div class="criterion-item">
+        <div class="criterion-num">03</div>
+        <div class="criterion-title">Start med h&#248;y-impact, lav-kompleksitet</div>
+        <div class="criterion-desc">F&#248;rst Matmegleren-prognoser og AST-automasjon &#8212; der ROI er rask og m&#229;lbar. Tidlige gevinster bygger intern tillit til KI og finansierer neste steg.</div>
+      </div>
+
+      <div class="criterion-item">
+        <div class="criterion-num">04</div>
+        <div class="criterion-title">Franchisetakerne m&#229; oppleve KI som hjelp</div>
+        <div class="criterion-desc">Dersom KI oppfattes som overv&#229;king eller merarbeid, vil motstanden sabotere utrullingen. Kommunikasjonsstrategien m&#229; v&#230;re &#171;KI er din assistent&#187; &#8212; ikke &#171;KI er konsernets kontrollverkt&#248;y&#187;.</div>
+      </div>
+
+      <div class="criterion-item">
+        <div class="criterion-num">05</div>
+        <div class="criterion-title">KI integreres i eksisterende systemer</div>
+        <div class="criterion-desc">KI som krever separate innlogginger eller nye plattformer blir ikke brukt. L&#248;sningene m&#229; integreres i POS, HR-system og regnskapssystem som allerede er i daglig bruk.</div>
+      </div>
+
+      <div class="criterion-item">
+        <div class="criterion-num">06</div>
+        <div class="criterion-title">Kompetanse bygges internt over tid</div>
+        <div class="criterion-desc">Bitastad kan ikke v&#230;re 100% avhengig av leverand&#248;rer for KI. En intern rolle som &#171;KI-ansvarlig&#187; eller et lite KI-team p&#229; HQ sikrer eierskap, kontinuitet og evnen til &#229; skalere videre.</div>
+      </div>
+
+    </div>
+
+    <!-- RISIKOANALYSE -->
+    <div>
+      <div class="col-head">Risikoanalyse</div>
+
+      <div class="risk-item">
+        <div class="risk-header">
+          <span class="risk-badge high">H&#248;y risiko</span>
+          <div class="risk-title">Manglende datakvalitet blokkerer KI-gevinster</div>
+        </div>
+        <div class="risk-desc">Fragmenterte og ukomplette data p&#229; tvers av konsepter og systemer gj&#248;r KI-modeller unoy&#248;yaktige og beslutninger feilaktige.</div>
+        <div class="risk-mitigation"><strong>Tiltak:</strong> Kartlegg dataflyt fra POS til HQ i Q1. Etabler datakvalitetseier per system. Krev datafundament p&#229; plass som betingelse for KI-utrulling.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-header">
+          <span class="risk-badge high">H&#248;y risiko</span>
+          <div class="risk-title">Organisatorisk motstand br&#248;msler implementering</div>
+        </div>
+        <div class="risk-desc">Daglige ledere og franchisetakere som opplever KI som trussel eller kontroll vil unng&#229; verkt&#248;yene, og gevinstene uteblir.</div>
+        <div class="risk-mitigation"><strong>Tiltak:</strong> Involver daglige ledere i pilot-design. Kommuniser KI som tidsbesparelse, ikke overv&#229;king. Lag interne ambassad&#248;rer blant de som bruker det f&#248;rst.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-header">
+          <span class="risk-badge high">H&#248;y risiko</span>
+          <div class="risk-title">Leverand&#248;ravhengighet og lock-in</div>
+        </div>
+        <div class="risk-desc">Dersom Bitastad bygger hele KI-stacken p&#229; &#233;n leverand&#248;rs plattform, er de sartbare ved prishopp, nedleggelse eller teknologiskifte.</div>
+        <div class="risk-mitigation"><strong>Tiltak:</strong> Krev &#229;pne API-er og dataportabilitet i alle KI-kontrakter. Vurder moduler fra ulike leverand&#248;rer fremfor plattform-monoplon.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-header">
+          <span class="risk-badge">Middels risiko</span>
+          <div class="risk-title">KI-prosjekter forsinkes og overskrider budsjett</div>
+        </div>
+        <div class="risk-desc">Komplekse integrasjoner mot eksisterende systemer tar lengre tid enn estimert, og gevinstene kommer senere enn vekstplanen forutsetter.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-header">
+          <span class="risk-badge">Middels risiko</span>
+          <div class="risk-title">GDPR og personvernbrudd</div>
+        </div>
+        <div class="risk-desc">KI som bruker ansattdata for turnover-predikasjon m&#229; overholde arbeidsmilj&#248;loven og GDPR. Feil her gir b&#248;ter og tillitsskade.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-header">
+          <span class="risk-badge">Lav risiko</span>
+          <div class="risk-title">KI-resultater oppfattes som en svart boks</div>
+        </div>
+        <div class="risk-desc">Ledere som ikke forst&#229;r hvorfor KI gir en anbefaling, vil ikke stole p&#229; den &#8212; og dermed ikke bruke den.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FORUTSETNINGER: HVA MA VAERE PA PLASS -->
+  <div class="prereq-section">
+    <div class="section-intro-block">
+      <div class="sec-kicker">Forutsetninger</div>
+      <div class="sec-title">Hva m&#229; v&#230;re p&#229; plass &#8212; og hvordan f&#229; det til</div>
+      <p class="sec-desc">Seks konkrete forutsetninger som m&#229; l&#248;ses f&#248;r KI gir reell veksteffekt for Bitastad.</p>
+    </div>
+
+    <div class="prereq-grid">
+
+      <div class="prereq-card">
+        <div class="prereq-num">Forutsetning 01</div>
+        <div class="prereq-title">Felles dataplattform</div>
+        <div class="prereq-desc">Data fra POS, HR, logistikk og regnskap m&#229; samles ett sted og v&#230;re tilgjengelig for analyse p&#229; tvers av konsepter og lokasjoner.</div>
+        <div class="prereq-how"><strong>Hvordan:</strong> Etabler en sentral dataplattform (f.eks. sky-basert data warehouse) koblet til eksisterende systemer. Prioriter dette som fundament i Q1&#8211;Q2.</div>
+      </div>
+
+      <div class="prereq-card">
+        <div class="prereq-num">Forutsetning 02</div>
+        <div class="prereq-title">Intern KI-eier p&#229; HQ</div>
+        <div class="prereq-desc">Noen m&#229; eie KI-satsingen internt &#8212; ikke bare IT, men en forretningsorientert rolle med mandat til &#229; prioritere use cases og drive endring.</div>
+        <div class="prereq-how"><strong>Hvordan:</strong> Ansett eller utpek en KI-ansvarlig med solid forretnignsforst&#229;else. Gi rollen direkte rapportlinje til COO eller CEO.</div>
+      </div>
+
+      <div class="prereq-card">
+        <div class="prereq-num">Forutsetning 03</div>
+        <div class="prereq-title">Pilotstruktur med m&#229;lbare KPIer</div>
+        <div class="prereq-desc">F&#248;r skalering m&#229; Bitastad bevise at KI-l&#248;sningene virker p&#229; et lite antall lokasjoner med tydelige suksesskriterier.</div>
+        <div class="prereq-how"><strong>Hvordan:</strong> Velg 5&#8211;10 pilotlokasjoner per use case. M&#229;l svinn, bemanningskostnader og NPS f&#248;r og etter. Skaler kun det som beviser effekt.</div>
+      </div>
+
+      <div class="prereq-card">
+        <div class="prereq-num">Forutsetning 04</div>
+        <div class="prereq-title">Leverand&#248;rstrategi p&#229; plass</div>
+        <div class="prereq-desc">Bitastad m&#229; velge riktige teknologipartnere &#8212; med klare krav til integrasjon, dataportabilitet og skalering.</div>
+        <div class="prereq-how"><strong>Hvordan:</strong> Gjennomf&#248;r leverand&#248;revaluering i Q2. Krev API-&#229;penhet og referanser fra tilsvarende virksomheter. Unng&#229; &#233;n-leverand&#248;r-avhengighet.</div>
+      </div>
+
+      <div class="prereq-card">
+        <div class="prereq-num">Forutsetning 05</div>
+        <div class="prereq-title">Endringskultur og intern oppl&#230;ring</div>
+        <div class="prereq-desc">KI-verkt&#248;y som ikke brukes gir null verdi. Alle ledd &#8212; fra daglig leder til HQ-ansatt &#8212; m&#229; forst&#229; hva KI gj&#248;r for dem og v&#230;re trygge p&#229; &#229; bruke det.</div>
+        <div class="prereq-how"><strong>Hvordan:</strong> Integrer KI-oppl&#230;ring i eksisterende onboarding. Lag interne eksempelhistorier fra pilotlokasjoner. Feir suksesshistoriene h&#248;yt.</div>
+      </div>
+
+      <div class="prereq-card">
+        <div class="prereq-num">Forutsetning 06</div>
+        <div class="prereq-title">Tydelig ROI-modell og budsjettrammer</div>
+        <div class="prereq-desc">KI-investeringen m&#229; ha klare forventninger til avkastning, n&#229;r gevinster realiseres og hva som er akseptabel kostnad i pilotfase.</div>
+        <div class="prereq-how"><strong>Hvordan:</strong> Lag en 3-&#229;rs ROI-modell per use case. Link til vekstm&#229;lene. Bruk svinnreduksjon og HR-besparelser som f&#248;rste m&#229;lepunkter &#8212; de er enkle &#229; tallfeste.</div>
+      </div>
+
+    </div>
+
+    <!-- LOGIC CHAIN -->
+    <div class="section-intro-block" style="margin-bottom:16px">
+      <div class="sec-kicker">Veien frem</div>
+      <div class="sec-title" style="font-size:20px">Logikkkjeden fra n&#229; til 300+ lokasjoner</div>
+    </div>
+    <div class="logic-chain">
+      <div class="logic-step">
+        <div class="logic-step-num">Steg 01</div>
+        <div class="logic-step-title">Datafundament</div>
+        <div class="logic-step-desc">Samle og rense data fra alle systemer. KPI: dataqualitys-score per kilde.</div>
+      </div>
+      <div class="logic-step">
+        <div class="logic-step-num">Steg 02</div>
+        <div class="logic-step-title">Pilot 5&#8211;10 use cases</div>
+        <div class="logic-step-desc">Matprognose, AST-automasjon, lokasjonanalyse. M&#229;l ROI etter 3 mnd.</div>
+      </div>
+      <div class="logic-step">
+        <div class="logic-step-num">Steg 03</div>
+        <div class="logic-step-title">Skaler det som virker</div>
+        <div class="logic-step-desc">Rull ut bevisste gevinster til alle lokasjoner. Forkast det som ikke m&#229;ler seg.</div>
+      </div>
+      <div class="logic-step">
+        <div class="logic-step-num">Steg 04</div>
+        <div class="logic-step-title">HQ skalerer uten stab</div>
+        <div class="logic-step-desc">90 ansatte betjener 300 lokasjoner. KI h&#229;ndterer volum, folk h&#229;ndterer unntakene.</div>
+      </div>
+      <div class="logic-step">
+        <div class="logic-step-num">Steg 05</div>
+        <div class="logic-step-title">300+ lokasjoner</div>
+        <div class="logic-step-desc">Vekstm&#229;let n&#229;s fordi flaskehalsene er l&#248;st &#8212; ikke arbeidet rundt.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- END PAGE: FORSIDE -->
+
+<!-- =====================================================
+     PAGE: PERSONAS (existing content)
+     ===================================================== -->
+<div class="page" id="page-personas">
+
 
 <div class="topbar">
   <strong>Bitastad - KI-strategi</strong>
@@ -1076,6 +1851,20 @@ body {
 
   </div>
 </div>
+
+
+</div>
+<!-- END PAGE: PERSONAS -->
+
+<script>
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
 
 </body>
 </html>
