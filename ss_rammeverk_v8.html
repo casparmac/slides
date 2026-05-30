@@ -1,0 +1,276 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body,div,span,p,button{font-family:system-ui,-apple-system,sans-serif}
+.w{padding:0 2px}
+.hdr{padding:20px 0 14px;border-bottom:1px solid #e5e7eb;margin-bottom:14px}
+.ht{font-size:17px;font-weight:600;color:#111}
+.hs{font-size:12px;color:#6b7280;margin-top:4px;line-height:1.5;max-width:760px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tab{font-size:12px;padding:6px 14px;border-radius:8px;border:1px solid #d1d5db;background:#fff;color:#6b7280;cursor:pointer;font-family:inherit;font-weight:500}
+.tab.on{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8;font-weight:600}
+.pnl{display:none}.pnl.on{display:block}
+.tabintro{font-size:12px;color:#6b7280;line-height:1.55;margin-bottom:14px;max-width:820px}
+.tabintro b{color:#374151;font-weight:600}
+.pg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.pc{border:1px solid #e5e7eb;border-radius:12px;padding:12px 14px;cursor:pointer;background:#fff;transition:border-color .15s}
+.pc:hover{border-color:#93c5fd;background:#f8faff}
+.pc.sel{border:2px solid #3b82f6;background:#eff6ff}
+.pnum{font-size:10px;color:#9ca3af;margin-bottom:4px;font-weight:600}
+.pc.sel .pnum{color:#3b82f6}
+.ptit{font-size:13px;font-weight:600;color:#111;line-height:1.3}
+.pc.sel .ptit{color:#1d4ed8}
+.psub{font-size:11px;color:#9ca3af;margin-top:3px}
+.dbox{border:1px solid #e5e7eb;border-radius:12px;padding:18px;background:#f9fafb}
+.dh{font-size:15px;font-weight:600;color:#111;margin-bottom:3px}
+.dt{font-size:12px;color:#6b7280;margin-bottom:16px;line-height:1.5}
+.dc{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+.dlbl{font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.subh{font-size:12px;font-weight:600;color:#374151;margin:14px 0 8px;padding-bottom:5px;border-bottom:1px solid #e5e7eb}
+.subh:first-child{margin-top:0}
+.ir{display:flex;align-items:flex-start;gap:8px;margin-bottom:9px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.in{font-size:12px;color:#111;font-weight:500;line-height:1.45}
+.is{font-size:11px;color:#6b7280;line-height:1.4}
+.lr{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+.ltag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:1px}
+.lt-akb{background:#dbeafe;color:#1e40af}
+.lt-akt{background:#f3f4f6;color:#6b7280}
+.ln{font-size:12px;color:#374151;line-height:1.45}
+.jg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.js{padding:13px 11px;border-top:3px solid transparent;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;cursor:pointer;background:#fff}
+.js:first-child{border-left:1px solid #e5e7eb;border-radius:10px 0 0 0}
+.js:last-child{border-radius:0 10px 0 0}
+.js.sel{background:#f9fafb}
+.jp{font-size:10px;color:#9ca3af;margin-bottom:3px;font-weight:600}
+.jt{font-size:12px;font-weight:600;color:#111;line-height:1.3}
+.jw{font-size:10px;color:#9ca3af;margin-top:2px}
+.jd{border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px;padding:16px;background:#f9fafb}
+.jcg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.jc{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:13px}
+.jch{font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+.jcp{font-size:12px;color:#374151;line-height:1.6}
+.arch{font-size:13px;font-weight:600;color:#374151;margin:4px 0 12px}
+.ag{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.ac{border:1px solid #e5e7eb;border-radius:12px;padding:14px;background:#fff;cursor:pointer;transition:border-color .15s}
+.ac:hover{border-color:#93c5fd;background:#f8faff}
+.an{font-size:13px;font-weight:600;color:#111;margin-bottom:4px}
+.ad{font-size:12px;color:#6b7280;line-height:1.5;margin-bottom:8px}
+.aentry{font-size:11px;color:#374151;background:#f3f4f6;border-radius:6px;padding:5px 9px;display:inline-block}
+.aentry b{color:#1d4ed8;font-weight:600}
+.mg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.mc{border:1px solid #e5e7eb;border-radius:12px;padding:15px;cursor:pointer;background:#fff;transition:border-color .15s}
+.mc:hover{border-color:#93c5fd;background:#f8faff}
+.mtags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.sb{font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.03em}
+.sb1{background:#dbeafe;color:#1e40af}.sb2{background:#d1fae5;color:#065f46}.sb3{background:#fef3c7;color:#92400e}.sb4{background:#dcfce7;color:#166534}.sb5{background:#fee2e2;color:#991b1b}.sb6{background:#e0e7ff;color:#3730a3}
+.mn{font-size:14px;font-weight:600;color:#111;margin-bottom:2px}
+.mdesc-sub{font-size:11px;color:#9ca3af;font-weight:500;margin-bottom:8px}
+.md{font-size:12px;color:#6b7280;line-height:1.55;margin-bottom:9px}
+.muse{font-size:11px;color:#374151;line-height:1.45;border-top:1px solid #f3f4f6;padding-top:8px}
+.muse b{color:#1d4ed8;font-weight:600}
+.catsec{margin-bottom:18px}
+.cath{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.cath .cdot{width:9px;height:9px;border-radius:3px}
+.qgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.qc{border:1px solid #e5e7eb;border-left-width:3px;border-radius:10px;padding:12px 13px;background:#fff;cursor:pointer;transition:border-color .15s}
+.qc:hover{border-color:#93c5fd;border-left-color:inherit;background:#f8faff}
+.qq{font-size:12px;color:#374151;font-weight:500;line-height:1.4;margin-bottom:8px}
+.qn{font-size:13px;font-weight:600;color:#111;line-height:1.3}
+.qarrow{color:#9ca3af;font-weight:400}
+.qout{font-size:11px;color:#6b7280;line-height:1.4;margin:3px 0 9px}
+.qmeta{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.qdur{font-size:10px;font-weight:600;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px}
+</style>
+<div class="w">
+<div class="hdr">
+<div class="ht">Fra KI-ambisjon til faktisk verdi — operativt rammeverk</div>
+<div class="hs">Sopra Steria hjelper virksomheter med å realisere verdien av KI ved å koble strategi, teknologi, data og mennesker i én helhetlig transformasjon — fra ambisjon og veikart til utvikling, implementering, adopsjon og skalering. Målet er ikke flere piloter, men målbar effekt, trygg skalering og varige kapabiliteter.</div>
+</div>
+<div class="tabs">
+<button class="tab on" onclick="sT('s',this)">De seks søylene</button>
+<button class="tab" onclick="sT('e',this)">Hvor starter kunden?</button>
+<button class="tab" onclick="sT('j',this)">Kundereisen</button>
+<button class="tab" onclick="sT('m',this)">Praksismodeller</button>
+<button class="tab" onclick="sT('a',this)">Akseleratorer</button>
+</div>
+
+<div id="ts" class="pnl on">
+<div class="pg">
+<div class="pc sel" onclick="sP(1)" id="c1"><div class="pnum">01</div><div class="ptit">Strategisk retning</div><div class="psub">Forretningsmål → KI-ambisjon</div></div>
+<div class="pc" onclick="sP(2)" id="c2"><div class="pnum">02</div><div class="ptit">Verdifokus og prioritering</div><div class="psub">Hvor ligger den største verdien?</div></div>
+<div class="pc" onclick="sP(3)" id="c3"><div class="pnum">03</div><div class="ptit">Operasjonsmodell</div><div class="psub">Drive KI · endre driften</div></div>
+<div class="pc" onclick="sP(4)" id="c4"><div class="pnum">04</div><div class="ptit">Data og teknologi</div><div class="psub">Fra kant til air-gap</div></div>
+<div class="pc" onclick="sP(5)" id="c5"><div class="pnum">05</div><div class="ptit">Adopsjon og endring</div><div class="psub">Forankring i alle roller</div></div>
+<div class="pc" onclick="sP(6)" id="c6"><div class="pnum">06</div><div class="ptit">Styring, tillit og skalering</div><div class="psub">Kontroll · risiko · FinOps</div></div>
+</div>
+<div class="dbox" id="pd"></div>
+</div>
+
+<div id="te" class="pnl">
+<div class="arch">De fleste kunder kommer ikke for "en KI-strategi" — de kommer med et problem. Inngangen avgjør hvor i rammeverket vi starter.</div>
+<div class="ag" id="ag"></div>
+</div>
+
+<div id="tj" class="pnl">
+<div class="jg">
+<div class="js sel" id="j1" style="border-top-color:#3b82f6" onclick="sJ(1)"><div class="jp">Fase 1</div><div class="jt">Ambisjon &amp; modenhet</div><div class="jw">Uke 1–4</div></div>
+<div class="js" id="j2" onclick="sJ(2)"><div class="jp">Fase 2</div><div class="jt">Design &amp; prioritering</div><div class="jw">Uke 5–10</div></div>
+<div class="js" id="j3" onclick="sJ(3)"><div class="jp">Fase 3</div><div class="jt">Bygg &amp; pilotér</div><div class="jw">Uke 11–24</div></div>
+<div class="js" id="j4" onclick="sJ(4)"><div class="jp">Fase 4</div><div class="jt">Skaler &amp; forankre</div><div class="jw">Uke 25+</div></div>
+</div>
+<div class="jd" id="jd"></div>
+</div>
+
+<div id="tm" class="pnl">
+<div class="tabintro"><b>Praksismodellene er tenkeverktøyene</b> — de visuelle modellene som forklarer hvordan vi går fra ambisjon til verdi. Hver er hentet rett ut av søylene, og kan tegnes på tavlen eller vises på en slide i et kundemøte.</div>
+<div class="mg" id="mg"></div>
+</div>
+
+<div id="ta" class="pnl">
+<div class="tabintro"><b>Akseleratorene er pakkede leveranseløp</b> — fast omfang, tydelig utfall, forutsigbar pris. Hver svarer på en konkret frustrasjon kunden faktisk har, og tar dem fra problem til resultat på 1–2 uker. Klikk på en for detaljer.</div>
+<div id="ab"></div>
+</div>
+</div>
+
+<script>
+var P={
+1:{h:"Strategisk retning",t:"Kunden kommer sjelden og sier «vi trenger en KI-strategi». De sier «vi må vokse», «vi må kutte kostnader», «vi taper terreng» eller «vi vet ikke hva som treffer oss». Vår jobb er å oversette forretningsmålet til en KI-ambisjon.",
+groups:[{title:"Hva vi gjør i praksis",items:[
+"#3b82f6|Oversetter forretningsmålet til KI-ambisjon|Vekst (2–3x), effektivitet (2–3x), konkurranseevne, innbyggerverdi eller endringsevne i en VUCA-verden",
+"#3b82f6|Setter posisjon|Pioner, rask etternøler eller selektiv adopter — og hva valget koster og krever",
+"#3b82f6|Avklarer rollen til KI|Skal KI forsvare dagens strategi, eller utfordre den?",
+"#3b82f6|Måler modenhet|Vilje, evne og rom — på tvers av ledelse, kultur, data og teknologi",
+"#3b82f6|Tegner eierskapet|Sentralisert, desentralisert eller hybrid — behov for CoE og CAIO",
+"#3b82f6|Setter agentisk KI i kontekst|Hva det betyr for bransjen, forretningsmodellen og lederskapet"]}],
+lev:[["akb","KI-modenhetsvurdering (webapp) med bransje-benchmark"],["akt","Ledergruppeworkshop: posisjonering og ambisjon"],["akb","Strategisk KI-veikart koblet til forretningsmål"],["akb","CoE- og operasjonsmodell-design"]]},
+2:{h:"Verdifokus og prioritering",t:"Målet er ikke flest mulig initiativer, men de riktige — fra raske gevinster til de store strategiske spillene. Vi finner hvor verdien ligger, og hvilken rekkefølge som gir mest igjen.",
+groups:[{title:"Hva vi gjør i praksis",items:[
+"#059669|Kartlegger verdien|Bransjespesifikk mulighetskartlegging og prosesskartlegging — hvilke aktiviteter kan KI flytte (kommunikasjon, datainnhenting, analyse, utførelse)",
+"#059669|Prioriterer langs fire akser|Verdi, tidshorisont, kompleksitet og gjenbrukbarhet på tvers av forretningsområder",
+"#059669|Skiller quick wins fra strategiske spill|Rask verdi nå vs. store, langsiktige løft — og balansen mellom dem",
+"#059669|Bygger business case|Realistiske gevinstestimater og investeringsrammer — i et språk CFO og styre kjenner igjen",
+"#059669|Setter prioriteringskriterier|Hva som skal kjøres, settes på vent, stoppes eller skaleres"]}],
+lev:[["akb","Verdi/tid-matrise med gjenbrukbarhet som egen akse"],["akt","Prosess- og mulighetskartlegging per forretningsområde"],["akb","Business case-mal for CFO og styre"],["akb","Porteføljekart med anbefalt rekkefølge"]]},
+3:{h:"Operasjonsmodell",t:"To spørsmål vi alltid stiller — og de har ulike svar. Det ene handler om hvordan du organiserer KI-arbeidet. Det andre om hva KI gjør med måten du driver virksomheten på i dag.",
+groups:[{title:"Hva er den optimale operasjonsmodellen for KI?",items:[
+"#d97706|Designer team og eierskap|Produktteam, plattformteam og CoE med tydelig mandat og beslutningsrett",
+"#d97706|Setter samspillet|Roller, beslutningsstrukturer og samhandling mellom forretning og IT",
+"#d97706|Industrialiserer leveransen|Agentfabrikk og pluginfabrikk — fra håndverk til gjentakbar produksjon"]},
+{title:"Hvordan vil KI endre dagens operasjonsmodell?",items:[
+"#d97706|Kartlegger hva som endres|Hvilke prosesser, roller og beslutninger flyttes når KI skalerer",
+"#d97706|Redesigner fra bunnen|Ikke press KI inn i gammel drift — spør hvordan vi ville bygget dette fra scratch i dag",
+"#d97706|Vurderer ringvirkningene|Organisasjonsstruktur, leverandørmodell og økosystem"]}],
+lev:[["akt","Operasjonsmodell-design og Team Canvas"],["akb","Agentfabrikk-blueprint"],["akt","Prosessredesign rundt menneske + maskin"],["akb","CoE Playbook"]]},
+4:{h:"Data og teknologi",t:"Plattformen som gjør KI mulig å skalere — sikkert, robust og gjenbrukbart. Spennet går fra åpne skyløsninger på kanten til lukkede, air-gapede miljøer for nasjonal sikkerhet.",
+groups:[{title:"Hva vi gjør i praksis",items:[
+"#16a34a|Bygger datagrunnlaget|Datakvalitet, dataeierskap og gjenbrukbar kunnskapsdokumentasjon",
+"#16a34a|Designer agent-arkitektur|Orkestrator, agenter, minne, verktøy og RAG-mønstre",
+"#16a34a|Dekker hele sikkerhetsspekteret|Fra kant til air-gap — for kommersiell drift, regulerte miljøer og forsvar",
+"#16a34a|Ivaretar digital suverenitet|Hvor data og modeller lever, og hvem som faktisk kontrollerer dem",
+"#16a34a|Industrialiserer integrasjoner|Pluginfabrikk for gjenbrukbare koblinger mot eksisterende systemer",
+"#16a34a|Sikrer mot misbruk|Red-teaming, kill switch og kontroller for ansvarlig KI",
+"#16a34a|Velger plattform leverandøruavhengig|Microsoft, AWS, GCP, open source eller hybrid"]}],
+lev:[["akb","Teknologi- og arkitekturblueprint"],["akt","Dataplattform-vurdering og migrasjonsplan"],["akb","Sikkerhetsarkitektur inkl. suverenitetskrav"],["akb","Agent- og plattformheatmap"]]},
+5:{h:"Adopsjon og endring",t:"KI skaper ingen verdi før den faktisk tas i bruk. Alle må overbevises — fra styret til den enkelte medarbeider — og prosessene må ofte tenkes helt på nytt, ikke bare automatiseres.",
+groups:[{title:"Hva vi gjør i praksis",items:[
+"#dc2626|Forankrer i hele organisasjonen|Styret, ledergruppen, mellomledere og medarbeidere — alle roller, topp til bunn",
+"#dc2626|Redesigner arbeidet|Glem gamle prosesser — spør hvordan vi ville løst oppgaven med dagens teknologi",
+"#dc2626|Bygger kompetanse bredt|Kurs, sertifisering, inspirasjon og dedikerte opplæringskontor",
+"#dc2626|Etablerer ambassadørnettverk|Front-runners som bærer endringen ut i linjene og skaper lokalt eierskap",
+"#dc2626|Skaper psykologisk trygghet|Rom for å eksperimentere, feile og lære",
+"#dc2626|Måler adopsjonen|Bruksrate, kompetanseindeks og endringsmodenhet over tid"]}],
+lev:[["akt","Skreddersydd adopsjonsplan per segment og rolle"],["akt","Leder- og styreprogram"],["akb","Kompetanseprogram i tre spor: leder, fagperson, utvikler"],["akb","Ambassadørprogram med måleverktøy"]]},
+6:{h:"Styring, tillit og skalering",t:"Skalering uten kontroll skaper kaos — og uten tillit tør ingen ta steget. Mange kunder starter faktisk her: de må få oversikt og trygghet før de tør gjøre mer.",
+groups:[{title:"Hva vi gjør i praksis",items:[
+"#2563eb|Skaffer oversikt|Kartlegger KI-porteføljen — hvem eier hva, og hvilken risiko bærer hvert system",
+"#2563eb|Designer governance|Rammeverk tilpasset virksomhetens modenhet og regulatoriske krav",
+"#2563eb|Setter opp Control Tower|Compliance, risiko, kost og ytelse i én løpende oversikt",
+"#2563eb|Håndterer EU AI Act|Klassifisering, risikovurdering og etterlevelsesplan",
+"#2563eb|Innfører FinOps for KI|Token-styring, kostnadstransparens og budsjettmodeller",
+"#2563eb|Designer Human-in-the-Loop|Når og hvordan mennesker skal gripe inn i agentiske arbeidsflyter"]}],
+lev:[["akt","KI-porteføljekartlegging og risikovurdering"],["akb","Governance Blueprint med roller og prosesser"],["akb","Control Tower (dashboard) implementering"],["akb","EU AI Act Playbook"]]}
+};
+
+var ARCH=[
+{n:"Kaos-kunden",d:"Har allerede mye i gang — én kunde har 3000 agenter — men har mistet oversikten. Trenger ikke strategi fra scratch, men kontroll og porteføljestyring nå.",e:"Styring (6)"},
+{n:"Risiko-kunden",d:"Vil gjerne, men tør ikke før risikoen er håndtert. Typisk bank og finans. Strategien er blokkert av compliance og sikkerhet.",e:"Styring (6)"},
+{n:"Suverenitetskunden",d:"Har ekstra krav til hvor data og modeller lever. Air-gap, nasjonal kontroll, klassifiserte miljøer. Teknologivalget kommer først.",e:"Data og teknologi (4)"},
+{n:"Sjefen-vil-ha-KI",d:"Toppstyrt initiativ uten reell forankring nedover. Strategien finnes, men organisasjonen har ikke kjøpt inn. Trenger endringsarbeid.",e:"Adopsjon (5)"},
+{n:"Pilothaugen",d:"Har 15–20 piloter, ingen skalerer — og vet ikke hvorfor. Trenger prioritering, governance og en vei fra POC til produksjon.",e:"Verdifokus (2)"},
+{n:"Den teknologidrevne",d:"IT har bygget mye, men forretningen bruker det ikke. Gap mellom det tekniske og det forretningsmessige.",e:"Verdifokus (2)"},
+{n:"Den regulerte",d:"Helse, forsvar, finans, offentlig. Compliance er en forutsetning, ikke en ettertanke. Governance må på plass før alt annet.",e:"Styring (6)"},
+{n:"Den som har prøvd og feilet",d:"Har investert, ikke fått effekt, er nå skeptisk. Trenger en ny tilnærming og troverdighet før de tør investere igjen.",e:"Strategisk retning (1)"}
+];
+
+var J={
+1:[["Aktiviteter","KI Ambition Workshop med ledelsen. Modenhetsvurdering på tvers av ledelse, kultur, data og teknologi. Posisjonering og benchmark mot bransje."],["Leveranser","KI Readiness Report. Modenhetsscore per dimensjon. Prioritert liste over mulighetsområder koblet til forretningsmål."],["Sopra Steria-roller","KI Strategy Lead + Data Architect + Change Advisor. Vi fasiliterer valgene, ikke bare rådgir."]],
+2:[["Aktiviteter","Verdi- og prosesskartlegging. Business case for topp-initiativene. Operasjonsmodell- og CoE-design. Teknologi- og arkitekturretning."],["Leveranser","Strategisk KI-veikart. Prioritert portefølje med business case. CoE-mandat. Teknologi-roadmap."],["Sopra Steria-roller","Strateg + løsningsarkitekt + endringsleder. Tverrfaglig team som speiler kundens egen organisasjon."]],
+3:[["Aktiviteter","Agentfabrikk settes opp. Første agenter bygges trygt. Kompetanseprogram for nøkkelpersoner. Adopsjon og lederforankring starter."],["Leveranser","Produksjonsklare pilotresultater. Dokumenterte gevinster. Opplærte team. Control Tower aktivert."],["Sopra Steria-roller","Utvikling + UX + endring + KI-drift. Vi leverer sammen med kundens team, ikke i stedet for dem."]],
+4:[["Aktiviteter","Utrulling til flere forretningsområder. Skalering av agentfabrikken. Gevinstrealisering og måling. Overgang til selvstendig drift."],["Leveranser","Skalerings- og utrullingsplan. Gevinstrealiseringsrapport. Selvbærende CoE med intern KI-kapabilitet."],["Sopra Steria-roller","Managed Services eller rådgivning. Vi bygger kapabilitet slik at kunden gradvis eier mer selv."]]
+};
+
+var M=[
+{tags:[1],n:"Ambisjonsbroen",sub:"Fra forretningsmål til posisjon og ambisjon",d:"Oversetter et konkret forretningsmål — vekst, effektivitet, konkurranseevne, innbyggerverdi eller endringsevne — til en KI-ambisjon, og kobler den til en valgt posisjon: fra konkurranseparitet til varig fortrinn.",use:"Tegnes i åpningen av et strategimøte for å flytte samtalen fra «KI» til «hva vi vil oppnå»."},
+{tags:[2],n:"Verdi/tid/gjenbruk-matrisen",sub:"Prioritering langs fire akser",d:"Plotter initiativer på verdi og tidshorisont, og vekter inn kompleksitet og gjenbrukbarhet på tvers av forretningsområder. Skiller quick wins fra strategiske spill.",use:"Brukes til å bygge porteføljen og forsvare rekkefølgen overfor ledelse og styre."},
+{tags:[2,5],n:"Prosess-røntgen",sub:"Sju aktiviteter, riktig KI på riktig sted",d:"Bryter en kjerneprosess ned i aktiviteter — kommunikasjon, datainnhenting, planlegging, registrering, analyse, utførelse, informering — og kobler hver til riktig KI-type. Avdekker hvor verdien faktisk ligger.",use:"Verksted med fagmiljøet for å gå fra «automatisere det vi gjør» til «bygge det vi burde gjort»."},
+{tags:[3],n:"Operasjonsmodellens to sider",sub:"Drive KI · endre driften",d:"Holder to spørsmål adskilt: hvilken operasjonsmodell KI-arbeidet krever, og hvordan KI endrer dagens drift, roller og beslutninger. To svar, ikke ett.",use:"Strukturerer dialogen med C-suite om organisering og transformasjon."},
+{tags:[3,4,6],n:"Fabrikk + Kontrolltårn",sub:"Industriell produksjon med innebygd kontroll",d:"Agentfabrikk og pluginfabrikk gjør KI-leveranse til gjentakbar produksjon med risikodifferensierte produksjonslinjer. Control Tower gir én løpende oversikt over portefølje, risiko, kost og etterlevelse.",use:"Svaret til kunden som har «mistet oversikten» — fra agentørken til agentmotorvei."},
+{tags:[4],n:"Sikkerhetsspekteret",sub:"Fra kant til air-gap",d:"Plasserer løsningen langs et spenn fra åpne skyløsninger til lukkede, air-gapede miljøer — styrt av krav til sikkerhet, regulering og digital suverenitet. Inkluderer red-teaming og kill switch.",use:"Rammer inn samtalen med regulerte og suverenitetskritiske kunder."},
+{tags:[5],n:"Forankringsstigen",sub:"Topp-til-bunn, alle roller",d:"Sikrer at KI forankres i hvert lag — styre, ledelse, mellomledere og medarbeidere — bygget på ADKAR og psykologisk trygghet. Ingen verdi før løsningen faktisk tas i bruk.",use:"Brukes til å vise at adopsjon er en plan, ikke et enkeltstående kurs."},
+{tags:[6],n:"Tillit før skala",sub:"Oversikt → kontroll → trygg skalering",d:"Modellen for kunden som må ha kontroll før de tør mer: kartlegg porteføljen, sett governance og Control Tower, og skalér først når tilliten er på plass. Særlig bank, helse, forsvar og offentlig.",use:"Snur «vi tør ikke» til «nå kan vi» — kontroll som muliggjører, ikke bremse."}
+];
+
+var ACC=[
+{cat:"Strategi & verdi",c:"#3b82f6",items:[
+{q:"Vi har ikke peiling på hvor vi egentlig står",n:"KI-modenhetssjekk",out:"Score på tvers av operasjonsmodellen + de tre viktigste grepene",dur:"1 uke",s:[1]},
+{q:"Styret vil ha KI, men vi vet ikke hva vi skal svare",n:"Styre- og ledelsesbrief",out:"KI-posisjon, ambisjon og hva det krever — klart til styremøtet",dur:"1 uke",s:[1]},
+{q:"Konkurrentene løper fra oss, og vi vet ikke hva de gjør",n:"Bransje- og konkurrentbenchmark",out:"Hvor dere står mot bransjen, og hvor gapene er størst",dur:"1–2 uker",s:[1]},
+{q:"Ledergruppa snakker ikke samme språk om KI",n:"Ledergruppe-upskilling",out:"Felles begrepsapparat og beslutningsgrunnlag i ledergruppen",dur:"1 uke",s:[1]},
+{q:"Vi har ambisjon, men ikke noe veikart",n:"Veikart-sprint",out:"Konkret 12–18 mnd veikart koblet til forretningsmål og KPI-er",dur:"2 uker",s:[1]},
+{q:"Vi vil investere i en plattform, men kan ikke forsvare regningen",n:"Business case for KI-plattform",out:"Komplett case for HW, SW og implementering — klar for CFO",dur:"2 uker",s:[2,4]},
+{q:"Vi har 40 idéer og vet ikke hvor vi skal begynne",n:"Verdisprint",out:"Prioritert portefølje langs verdi, tid og gjenbruk",dur:"2 uker",s:[2]},
+{q:"Vi vet ikke om casene våre faktisk lønner seg",n:"Business case-validering",out:"Gevinstestimat og ROI på dine topp-initiativer",dur:"1 uke",s:[2]}
+]},
+{cat:"Operasjonsmodell",c:"#d97706",items:[
+{q:"KI-arbeidet vårt er spredt og ingen eier det",n:"CoE-design",out:"Mandat, roller og governance for din KI-enhet",dur:"2 uker",s:[3]},
+{q:"Vi automatiserer gammelt rot i stedet for å tenke nytt",n:"Prosess-røntgen",out:"Én kjerneprosess brutt ned og redesignet rundt KI",dur:"2 uker",s:[3,5]},
+{q:"Skal vi kjøpe, bygge eller inngå partnerskap?",n:"Kjøp/bygg/partner-vurdering",out:"Anbefalt sourcing-strategi per kapabilitet",dur:"1–2 uker",s:[3]},
+{q:"Vi vet ikke hvordan KI endrer jobbene våre",n:"Rolle- og arbeidsflytanalyse",out:"Hvilke roller og oppgaver som endres når KI skalerer",dur:"2 uker",s:[3]}
+]},
+{cat:"Data & teknologi",c:"#16a34a",items:[
+{q:"Vi vet ikke om dataene våre er KI-klare",n:"Data-readiness-sjekk",out:"Kvalitet, eierskap og konkret tiltaksplan",dur:"1–2 uker",s:[4]},
+{q:"Vi drukner i leverandører og vet ikke hva vi skal velge",n:"Tech-stack-vurdering",out:"Anbefalt arkitektur og plattform — leverandøruavhengig",dur:"2 uker",s:[4]},
+{q:"Vi har en idé, men får den aldri ut av POC",n:"GenAI-sprint",out:"Fra konsept til fungerende, testbar prototype",dur:"2 uker",s:[4,2]},
+{q:"Vi kan ikke bruke skyen — dataene er for sensitive",n:"Suverenitets- og sikkerhetsvurdering",out:"Anbefalt løsning langs spennet fra kant til air-gap",dur:"2 uker",s:[4]},
+{q:"Vi har bygget mye, men ingenting henger sammen",n:"Arkitektur-helsesjekk",out:"Kartlagt arkitektur med prioriterte forbedringer",dur:"1–2 uker",s:[4]},
+{q:"Er agentene våre trygge mot misbruk?",n:"Red-teaming av KI-løsning",out:"Identifiserte sårbarheter og anbefalte kontroller",dur:"1–2 uker",s:[4]}
+]},
+{cat:"Adopsjon",c:"#dc2626",items:[
+{q:"Vi har kjøpt Claude/Copilot, men ingen bruker det",n:"Kom i gang med Claude Enterprise",out:"Utrullet, sikret og tatt i reell bruk i organisasjonen",dur:"2 uker",s:[5,4]},
+{q:"Folk er redde eller likegyldige til KI",n:"Adopsjonsteam-oppstart",out:"Operativt adopsjonsteam med ambassadører, plan og måling",dur:"2 uker",s:[5]},
+{q:"Vi lærte opp folk, men de faller tilbake til gamle vaner",n:"Forankrings- og reinforcement-løp",out:"Tiltak som gjør ny adferd varig, med målepunkter",dur:"2 uker",s:[5]},
+{q:"Mellomlederne våre bremser hele greia",n:"Mellomleder-aktivering",out:"Mellomledere som driver endringen i stedet for å bremse",dur:"1–2 uker",s:[5]}
+]},
+{cat:"Styring",c:"#2563eb",items:[
+{q:"Vi har mistet oversikten over alt som skjer",n:"Porteføljekartlegging",out:"Full oversikt over agenter, eierskap og risiko",dur:"1–2 uker",s:[6]},
+{q:"Vi tør ikke skalere før vi har kontroll",n:"Governance-oppsett",out:"Rammeverk og grunnlag for Control Tower på plass",dur:"2 uker",s:[6]},
+{q:"Vi aner ikke om vi er compliant med EU AI Act",n:"EU AI Act-sjekk",out:"Klassifisering av systemer og konkret gap-analyse",dur:"1–2 uker",s:[6]},
+{q:"Kostnadene løper løpsk og ingen følger med",n:"FinOps for KI",out:"Kostnadsoversikt, token-styring og budsjettmodell",dur:"1–2 uker",s:[6]}
+]}
+];
+
+var jc={1:"#3b82f6",2:"#059669",3:"#d97706",4:"#16a34a"};
+
+function mkItems(a){return a.map(function(s){var p=s.split('|');return'<div class="ir"><div class="dot" style="background:'+p[0]+'"></div><div><div class="in">'+p[1]+'</div><div class="is">'+p[2]+'</div></div></div>';}).join('');}
+function mkLev(a){return a.map(function(x){var lbl=x[0]==='akb'?'Akselerator':'Aktivitet';return'<div class="lr"><span class="ltag lt-'+x[0]+'">'+lbl+'</span><span class="ln">'+x[1]+'</span></div>';}).join('');}
+function rP(id){var d=P[id];var g='';d.groups.forEach(function(gr){g+='<div class="subh">'+gr.title+'</div>'+mkItems(gr.items);});document.getElementById('pd').innerHTML='<div class="dh">'+d.h+'</div><div class="dt">'+d.t+'</div><div class="dc"><div>'+g+'</div><div><div class="dlbl">Leveranser</div>'+mkLev(d.lev)+'</div></div>';}
+function sP(id){for(var i=1;i<=6;i++)document.getElementById('c'+i).classList.toggle('sel',i===id);rP(id);}
+function rArch(){var h='';ARCH.forEach(function(a){h+='<div class="ac" onclick="sendPrompt(\'Hvordan tar vi imot arketypen '+a.n+' i et kundemøte?\')"><div class="an">'+a.n+'</div><div class="ad">'+a.d+'</div><div class="aentry">Starter i: <b>'+a.e+'</b></div></div>';});document.getElementById('ag').innerHTML=h;}
+function rJ(id){var c=J[id];var h='<div class="jcg">';c.forEach(function(x){h+='<div class="jc"><div class="jch">'+x[0]+'</div><div class="jcp">'+x[1]+'</div></div>';});document.getElementById('jd').innerHTML=h+'</div>';}
+function sJ(id){for(var i=1;i<=4;i++){var e=document.getElementById('j'+i);e.style.borderTopColor=i===id?jc[id]:'transparent';e.classList.toggle('sel',i===id);}rJ(id);}
+function rM(){var h='';M.forEach(function(m){var tg=m.tags.map(function(t){return'<span class="sb sb'+t+'">SØYLE '+t+'</span>';}).join('');h+='<div class="mc" onclick="sendPrompt(\'Forklar praksismodellen '+m.n+' — hvordan tegner og forteller jeg den i et kundemøte?\')"><div class="mtags">'+tg+'</div><div class="mn">'+m.n+'</div><div class="mdesc-sub">'+m.sub+'</div><div class="md">'+m.d+'</div><div class="muse"><b>I møtet:</b> '+m.use+'</div></div>';});document.getElementById('mg').innerHTML=h;}
+function rA(){var h='';ACC.forEach(function(g){var cards='';g.items.forEach(function(it){var sb=it.s.map(function(t){return'<span class="sb sb'+t+'">SØYLE '+t+'</span>';}).join('');cards+='<div class="qc" style="border-left-color:'+g.c+'" onclick="sendPrompt(\'Beskriv akseleratoren '+it.n+' — hva inngår, hva er leveransen og hvordan selger jeg den inn?\')"><div class="qq">«'+it.q+'»</div><div class="qn"><span class="qarrow">→ </span>'+it.n+'</div><div class="qout">'+it.out+'</div><div class="qmeta"><span class="qdur">'+it.dur+'</span>'+sb+'</div></div>';});h+='<div class="catsec"><div class="cath"><span class="cdot" style="background:'+g.c+'"></span>'+g.cat+'</div><div class="qgrid">'+cards+'</div></div>';});document.getElementById('ab').innerHTML=h;}
+function sT(n,b){document.querySelectorAll('.pnl').forEach(function(x){x.classList.remove('on');});document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');});document.getElementById('t'+n).classList.add('on');b.classList.add('on');}
+rP(1);rArch();rJ(1);rM();rA();
+</script>
