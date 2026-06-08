@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitastad – Konserndashboard CEO</title>
+<style>
+  :root{
+    --ss-purple:#4d1d82; --ss-dark-purple:#2A1449; --ss-bg-purple:#ede9f2;
+    --ss-bg-beige:#fdf2e5; --ss-black:#1d1d1b; --ss-warm-purple:#8b1d82;
+    --ss-orange:#f07d00; --ss-red:#cf022b; --ss-grey:#a8a8a7; --ss-light-grey:#ededed;
+    --green:#1e9e6a; --green-bg:#e6f5ee; --red-bg:#fbe7ea; --amber:#e08a00; --amber-bg:#fdf0db;
+    --font-heading:'Hurme Geometric Sans 4', Tahoma, Arial, sans-serif;
+    --font-body:'Hurme Geometric Sans 3', Tahoma, Arial, sans-serif;
+    --card:#fff; --bg:#f4f2f7; --line:#ece8f1; --muted:#6b6577;
+    --c-jbp:#e8336d; --c-bb:#d99016; --c-sab:#138f8f; --c-sot:#8b5e3c; --c-kompis:#cf022b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--font-body);background:var(--bg);color:var(--ss-black);
+    -webkit-font-smoothing:antialiased;font-size:13px;line-height:1.35}
+  h1,h2,h3,.num{font-family:var(--font-heading)}
+  .app{height:100vh;display:flex;flex-direction:column}
+  /* Topbar */
+  .topbar{background:#fff;border-bottom:1px solid var(--line);padding:9px 18px;
+    display:flex;align-items:center;gap:16px;flex:none}
+  .brand{display:flex;align-items:baseline;gap:9px}
+  .logo{font-family:var(--font-heading);font-weight:700;font-size:19px;color:var(--ss-purple)}
+  .logo .dot{color:var(--ss-orange)}
+  .crumb{color:var(--muted);font-size:12px;border-left:1px solid var(--line);padding-left:11px}
+  .spacer{flex:1}
+  .focuschip{display:none;align-items:center;gap:8px;background:var(--ss-bg-purple);
+    color:var(--ss-purple);font-weight:700;font-size:12px;padding:5px 6px 5px 11px;border-radius:20px}
+  .focuschip.on{display:flex}
+  .focuschip .x{cursor:pointer;background:#fff;border-radius:50%;width:18px;height:18px;
+    display:flex;align-items:center;justify-content:center;font-size:12px;line-height:1}
+  .badge{background:var(--ss-bg-beige);color:var(--amber);font-weight:700;font-size:10px;
+    padding:4px 9px;border-radius:20px;border:1px solid #f3e1c4}
+  .period{display:flex;background:var(--ss-bg-purple);border-radius:9px;padding:3px;transition:opacity .2s}
+  .period.dim{opacity:.4;pointer-events:none}
+  .period button{font-family:var(--font-body);border:none;background:none;cursor:pointer;
+    padding:6px 13px;border-radius:7px;font-size:12px;color:var(--ss-purple);font-weight:600}
+  .period button.active{background:var(--ss-orange);color:#fff}
+  .asof{color:var(--muted);font-size:11px}
+  .ss{font-family:var(--font-heading);font-weight:700;color:var(--ss-purple);font-size:11px}
+  /* layout grid that fills screen */
+  .wrap{flex:1;min-height:0;display:grid;grid-template-rows:auto 1fr;gap:11px;padding:11px 16px}
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:11px}
+  .main{display:grid;grid-template-columns:1.55fr 1fr 1fr;gap:11px;min-height:0}
+  .col{display:grid;gap:11px;min-height:0}
+  .colA{grid-template-rows:1.15fr 1fr}
+  .colB{grid-template-rows:1.3fr 1fr}
+  .colC{grid-template-rows:1fr 1fr}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 14px;
+    box-shadow:0 1px 2px rgba(42,20,73,.04);min-height:0;display:flex;flex-direction:column;overflow:hidden}
+  .card h2{font-size:13.5px;color:var(--ss-purple);font-weight:700}
+  .card .sub{color:var(--muted);font-size:11px;margin-top:1px;margin-bottom:8px}
+  /* KPI */
+  .kpi{padding:11px 13px}
+  .kpi .label{color:var(--muted);font-size:11px;font-weight:600;margin-bottom:6px;min-height:26px}
+  .kpi .value{font-size:21px;font-weight:700;color:var(--ss-dark-purple);line-height:1}
+  .kpi .value small{font-size:11px;color:var(--muted);font-weight:600}
+  .kpi .foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .delta{font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px;white-space:nowrap}
+  .delta.up{color:var(--green);background:var(--green-bg)}
+  .delta.down{color:var(--ss-red);background:var(--red-bg)}
+  .delta.flat{color:var(--amber);background:var(--amber-bg)}
+  .spark{width:58px;height:22px}
+  /* chart */
+  .chart{width:100%;flex:1;min-height:0}
+  .legend{display:flex;gap:16px;font-size:11px;color:var(--muted);margin-top:4px}
+  .legend i{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+  .tt{position:fixed;pointer-events:none;background:var(--ss-dark-purple);color:#fff;
+    padding:7px 9px;border-radius:7px;font-size:11px;opacity:0;transition:opacity .1s;z-index:99;white-space:nowrap}
+  .tt b{font-family:var(--font-heading)}
+  /* concepts */
+  .clist{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;margin-top:4px}
+  .concept{cursor:pointer;border-radius:9px;padding:6px 8px;transition:background .15s;border:1px solid transparent}
+  .concept:hover{background:var(--ss-bg-purple)}
+  .concept.sel{background:var(--ss-bg-purple);border-color:var(--ss-purple)}
+  .concept .top{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+  .swatch{width:10px;height:10px;border-radius:3px;flex:none}
+  .concept .name{font-weight:700;font-size:12.5px}
+  .concept .right{margin-left:auto;display:flex;gap:9px;align-items:center;font-size:11px;color:var(--muted)}
+  .concept .right b{color:var(--ss-black);font-family:var(--font-heading)}
+  .bar{height:8px;background:var(--ss-light-grey);border-radius:6px;overflow:hidden}
+  .bar>span{display:block;height:100%;border-radius:6px;transition:width .4s}
+  .pill{font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px}
+  .pill.pos{color:var(--green);background:var(--green-bg)}
+  .pill.neg{color:var(--ss-red);background:var(--red-bg)}
+  .pill.neu{color:var(--amber);background:var(--amber-bg)}
+  .hint{font-size:10.5px;color:var(--ss-orange);font-weight:600;margin-top:5px}
+  /* op */
+  .op{flex:1;display:flex;flex-direction:column;justify-content:space-around;gap:9px;margin-top:4px}
+  .op .row{display:flex;align-items:center;gap:10px}
+  .op .row .lab{width:140px;font-size:12px}
+  .op .row .track{flex:1;height:9px;background:var(--ss-light-grey);border-radius:6px;position:relative}
+  .op .row .track>span{position:absolute;left:0;top:0;height:100%;border-radius:6px}
+  .op .row .goal{position:absolute;top:-3px;width:2px;height:15px;background:var(--ss-dark-purple)}
+  .op .row .val{width:78px;text-align:right;font-family:var(--font-heading);font-weight:700;font-size:12px}
+  .op .row .val small{color:var(--muted);font-weight:600;font-size:10px;font-family:var(--font-body)}
+  /* stats */
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:9px 14px;margin-top:4px}
+  .stat .l{color:var(--muted);font-size:11px;margin-bottom:2px}
+  .stat .v{font-family:var(--font-heading);font-weight:700;font-size:17px;color:var(--ss-dark-purple)}
+  .stat .v small{font-size:11px;color:var(--muted);font-weight:600}
+  /* tables */
+  .loc{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:0;margin-top:4px}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{text-align:left;color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;
+    padding:4px 6px;border-bottom:1px solid var(--line)}
+  td{padding:5px 6px;border-bottom:1px solid #f4f1f7}
+  td.r,th.r{text-align:right}
+  tr:last-child td{border-bottom:none}
+  .loc-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
+  .mono{font-family:var(--font-heading);font-weight:700}
+  .empty{color:var(--muted);font-size:11px;padding:8px 6px}
+  /* alerts */
+  .alerts{flex:1;min-height:0;overflow:auto;margin-top:4px}
+  .alert{display:flex;gap:9px;padding:8px 10px;border-radius:9px;margin-bottom:7px;align-items:flex-start}
+  .alert .ic{width:8px;height:8px;border-radius:50%;flex:none;margin-top:4px}
+  .alert.r{background:var(--red-bg)} .alert.r .ic{background:var(--ss-red)}
+  .alert.a{background:var(--amber-bg)} .alert.a .ic{background:var(--amber)}
+  .alert.g{background:var(--green-bg)} .alert.g .ic{background:var(--green)}
+  .alert .txt{font-size:11.5px;line-height:1.4}
+  .alert .txt b{font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><span class="logo">bitastad<span class="dot">.</span></span>
+      <span class="crumb">Konserndashboard · CEO</span></div>
+    <div class="focuschip" id="focuschip"><span id="focusname"></span>
+      <span class="x" id="focusx">✕</span></div>
+    <div class="spacer"></div>
+    <span class="badge">EKSEMPELDATA</span>
+    <div class="period" id="period">
+      <button data-p="m">Måned</button>
+      <button data-p="q">Kvartal</button>
+      <button data-p="y" class="active">Hittil i år</button>
+    </div>
+    <span class="asof">Per 30. apr 2026</span>
+    <span class="ss">Sopra Steria</span>
+  </div>
+
+  <div class="wrap">
+    <div class="kpis" id="kpis"></div>
+
+    <div class="main">
+      <!-- Column A -->
+      <div class="col colA">
+        <div class="card">
+          <h2 id="chartTitle">Omsetning mot budsjett</h2>
+          <div class="sub" id="chartSub">Konsern · siste 12 måneder · MNOK</div>
+          <svg class="chart" id="lineChart"></svg>
+          <div class="legend">
+            <span><i id="legActual" style="background:var(--ss-purple)"></i>Faktisk omsetning</span>
+            <span><i style="background:var(--ss-orange)"></i>Budsjett</span>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Ytelse per konsept</h2>
+          <div class="sub">Søylebredde = omsetning · <b style="color:var(--ss-orange)">klikk et konsept for å fokusere hele dashboardet</b></div>
+          <div class="clist" id="concepts"></div>
+        </div>
+      </div>
+
+      <!-- Column B -->
+      <div class="col colB">
+        <div class="card">
+          <h2>Operasjonelle nøkkeltall</h2><div class="sub">Konsern · stolpe = faktisk · strek = mål</div>
+          <div class="op" id="opmetrics"></div>
+        </div>
+        <div class="card">
+          <h2>Finansiell helse</h2><div class="sub">Konsern · hittil i år</div>
+          <div class="stats">
+            <div class="stat"><div class="l">Kontantbeholdning</div><div class="v">142 <small>MNOK</small></div></div>
+            <div class="stat"><div class="l">Netto rentebærende gjeld</div><div class="v">221 <small>MNOK</small></div></div>
+            <div class="stat"><div class="l">Investeringer (CAPEX)</div><div class="v">64 <small>MNOK</small></div></div>
+            <div class="stat"><div class="l">Likviditetsgrad</div><div class="v">0,9</div></div>
+            <div class="stat"><div class="l">Steder i drift</div><div class="v">159</div></div>
+            <div class="stat"><div class="l">Pipeline nyåpninger</div><div class="v">11 <small>12 mnd</small></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column C -->
+      <div class="col colC">
+        <div class="card">
+          <h2 id="locTitle">Lokasjonsrangering</h2><div class="sub" id="locSub">Topp og svakeste steder · omsetning hittil i år (MNOK)</div>
+          <div class="loc">
+            <div><table><thead><tr><th>Topp</th><th class="r">Oms.</th><th class="r">Marg.</th></tr></thead>
+              <tbody id="locTop"></tbody></table></div>
+            <div><table><thead><tr><th>Svakeste</th><th class="r">Oms.</th><th class="r">Marg.</th></tr></thead>
+              <tbody id="locBot"></tbody></table></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Varsler</h2><div class="sub" id="alertSub">Krever oppfølging</div>
+          <div class="alerts" id="alerts"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tt" id="tt"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const state={period:"y",concept:null};
+
+/* ---------- konsern KPI (3 perioder) ---------- */
+const KPI={
+  y:[
+    {l:"Omsetning (konsern)",v:"1 184",u:"MNOK",d:"+8,2 %",t:"up",s:[88,92,101,110,124,131,118,112,104,121,109,142]},
+    {l:"EBITDA-margin",v:"8,6",u:"%",d:"+0,9 pp",t:"up",s:[7.4,7.8,8,8.3,8.6,8.9,8.2,8,7.9,8.5,8.4,9.1]},
+    {l:"Driftsresultat (EBIT)",v:"38",u:"MNOK · 3,2 %",d:"+12 MNOK",t:"up",s:[2,3,3,4,5,6,3,3,3,4,5,6]},
+    {l:"Sammenlignbar vekst (L4L)",v:"+3,1",u:"%",d:"+0,4 pp",t:"up",s:[1.2,1.8,2.1,2.6,3,3.4,2.7,2.3,2,3.1,3,3.5]},
+    {l:"Gjester",v:"7,7",u:"mill",d:"+6,4 %",t:"up",s:[.55,.57,.6,.64,.7,.75,.6,.6,.62,.66,.7,.74]},
+    {l:"Snittbong",v:"154",u:"kr",d:"+2,1 %",t:"up",s:[148,149,150,151,152,154,151,150,150,152,153,156]}],
+  q:[
+    {l:"Omsetning (konsern)",v:"372",u:"MNOK",d:"+7,1 %",t:"up",s:[121,109,142,118,112,104,121,109,142,124,131,121]},
+    {l:"EBITDA-margin",v:"9,1",u:"%",d:"+0,6 pp",t:"up",s:[8,8.3,8.6,8.9,9,9.1,8.8,8.9,9,9.1,9.2,9.1]},
+    {l:"Driftsresultat (EBIT)",v:"14",u:"MNOK · 3,8 %",d:"+4 MNOK",t:"up",s:[3,4,5,4,5,5,4,5,5,4,5,5]},
+    {l:"Sammenlignbar vekst (L4L)",v:"+2,7",u:"%",d:"−0,2 pp",t:"flat",s:[3.1,3,2.9,2.8,2.7,2.7,2.8,2.7,2.6,2.7,2.7,2.7]},
+    {l:"Gjester",v:"2,4",u:"mill",d:"+5,2 %",t:"up",s:[.74,.77,.78,.79,.8,.82,.78,.79,.8,.81,.82,.81]},
+    {l:"Snittbong",v:"155",u:"kr",d:"+2,8 %",t:"up",s:[150,151,152,153,154,155,153,154,154,155,156,155]}],
+  m:[
+    {l:"Omsetning (konsern)",v:"128",u:"MNOK",d:"+5,9 %",t:"up",s:[104,109,112,118,121,124,128,121,124,126,127,128]},
+    {l:"EBITDA-margin",v:"9,4",u:"%",d:"+0,3 pp",t:"up",s:[9,9.1,9.1,9.2,9.3,9.3,9.4,9.3,9.3,9.4,9.4,9.4]},
+    {l:"Driftsresultat (EBIT)",v:"5,4",u:"MNOK · 4,2 %",d:"+0,9 MNOK",t:"up",s:[4,4,5,5,5,5,5,5,5,5,5,5]},
+    {l:"Sammenlignbar vekst (L4L)",v:"+1,9",u:"%",d:"−0,8 pp",t:"flat",s:[2.7,2.6,2.4,2.3,2.1,2,1.9,2,1.9,1.9,1.9,1.9]},
+    {l:"Gjester",v:"0,83",u:"mill",d:"+4,1 %",t:"up",s:[.74,.76,.78,.79,.8,.81,.83,.81,.81,.82,.83,.83]},
+    {l:"Snittbong",v:"154",u:"kr",d:"+3,0 %",t:"up",s:[150,151,151,152,153,153,154,153,153,154,154,154]}]
+};
+const MONTHS=["jul","aug","sep","okt","nov","des","jan","feb","mar","apr","mai","jun"];
+const BUDGET=[112,110,108,115,112,135,95,96,100,108,118,126];
+
+/* ---------- konsept ---------- */
+const ORDER=["jbp","bb","sab","sot","kompis"];
+const CONCEPT={
+  jbp:{name:"Jordbærpikene",color:"var(--c-jbp)",oms:392,mar:11.2,l4l:4.5,st:47,bf:.97,
+    series:[39,37,34,40,36,47,29,30,33,36,41,43],
+    kpi:[["+9,1 %","up"],["+0,7 pp","up"],["26","MNOK · 6,6 %","+4 MNOK","up"],["+4,5","%","+0,6 pp","up"],["2,58","mill","+6,2 %","up"],["152","kr","+2,7 %","up"]]},
+  bb:{name:"Big Bite",color:"var(--c-bb)",oms:358,mar:9.8,l4l:2.1,st:41,bf:1.04,
+    series:[35,34,31,36,33,43,26,28,30,33,37,39],
+    kpi:[["+5,4 %","up"],["+0,2 pp","flat"],["21","MNOK · 5,9 %","+2 MNOK","up"],["+2,1","%","−0,3 pp","flat"],["2,80","mill","+3,1 %","up"],["128","kr","+2,2 %","up"]]},
+  sab:{name:"Sabrura",color:"var(--c-sab)",oms:286,mar:13.5,l4l:6.8,st:28,bf:.96,
+    series:[28,27,25,29,26,34,21,22,24,26,30,31],
+    kpi:[["+13,8 %","up"],["+0,9 pp","up"],["24","MNOK · 8,4 %","+6 MNOK","up"],["+6,8","%","+1,1 pp","up"],["1,34","mill","+9,5 %","up"],["214","kr","+3,9 %","up"]]},
+  sot:{name:"SOT bar & burger",color:"var(--c-sot)",oms:92,mar:7.4,l4l:1.2,st:14,bf:1.06,
+    series:[9,9,8,10,9,11,7,7,8,9,10,10],
+    kpi:[["+4,2 %","up"],["−0,3 pp","flat"],["4","MNOK · 4,3 %","±0","flat"],["+1,2","%","−0,4 pp","flat"],["0,52","mill","+2,0 %","up"],["176","kr","+1,8 %","up"]]},
+  kompis:{name:"Kompis",color:"var(--c-kompis)",oms:56,mar:-4.2,l4l:-3.5,st:19,bf:1.22,
+    series:[8,7,7,6,6,7,5,5,5,4,4,4],
+    kpi:[["−6,5 %","down"],["−2,1 pp","down"],["−5","MNOK · −8,9 %","−3 MNOK","down"],["−3,5","%","−1,2 pp","down"],["0,47","mill","−5,0 %","down"],["118","kr","−1,2 %","down"]]}
+};
+const KLAB=["Omsetning","EBITDA-margin","Driftsresultat (EBIT)","Sammenlignbar vekst (L4L)","Gjester","Snittbong"];
+
+/* ---------- lokasjoner (tagget med konsept) ---------- */
+const LOC=[
+  ["Jordbærpikene Lagunen","jbp",18.2,14.1],["Sabrura Solsiden","sab",16.8,16.2],
+  ["Big Bite Oslo S","bb",15.4,11.8],["Jordbærpikene City Nord","jbp",14.1,12.9],
+  ["Sabrura Herkules","sab",13.2,15.4],["Big Bite Trondheim","bb",11.0,10.2],
+  ["Jordbærpikene Åsane","jbp",9.8,11.0],["Sabrura Moa","sab",8.4,13.0],
+  ["SOT Solsiden","sot",7.1,6.0],["Big Bite Steinkjer","bb",4.4,1.1],
+  ["SOT Lillestrøm","sot",4.2,-2.4],["Kompis Molde","kompis",4.0,-1.8],
+  ["Kompis Levanger","kompis",3.6,-6.1],["Kompis Orkanger","kompis",3.1,-8.2]
+];
+const CCOL={jbp:"var(--c-jbp)",bb:"var(--c-bb)",sab:"var(--c-sab)",sot:"var(--c-sot)",kompis:"var(--c-kompis)"};
+
+/* ---------- varsler (tagget) ---------- */
+const ALERTS=[
+  ["r","kompis","Kompis: negativ sammenlignbar vekst tredje måned på rad","−3,5 % L4L · vurder tiltakspakke / konseptgjennomgang"],
+  ["a","sab","Sabrura: varekostnad +1,8 pp","Laksepris presser marginen · revurder meny/innkjøp"],
+  ["a","all","Personalkostnad over mål i 11 lokasjoner","33,8 % mot mål 33 % · bemanningsplanlegging"],
+  ["g","all","3 nyåpninger fullført denne måneden","Jordbærpikene ×2, Sabrura ×1 · innenfor budsjett"],
+  ["g","all","Matmegleren leveringspresisjon over mål","98,4 % · stabil forsyning til alle kjeder"],
+  ["g","jbp","Jordbærpikene leder konsernet på sammenlignbar vekst","+4,5 % L4L · sterk kjøpesentertrafikk"],
+  ["a","bb","Big Bite: flat utvikling","+2,1 % L4L · vurder kampanje og nye lokasjoner"]
+];
+const OP=[
+  {l:"Varekostnad",v:31.2,goal:30,max:45,inv:true,u:"%",gl:"mål ≤30"},
+  {l:"Personalkostnad",v:33.8,goal:33,max:45,inv:true,u:"%",gl:"mål ≤33"},
+  {l:"Svinn",v:2.1,goal:2,max:5,inv:true,u:"%",gl:"mål ≤2,0"},
+  {l:"Gjestetilfredshet (NPS)",v:72,goal:70,max:100,inv:false,u:"",gl:"mål 70"},
+  {l:"Leveringspresisjon",v:98.4,goal:98,max:100,inv:false,u:"%",gl:"mål 98"}
+];
+
+/* ---------- helpers ---------- */
+function spark(d,col){
+  const w=58,h=22,mn=Math.min(...d),mx=Math.max(...d),r=(mx-mn)||1;
+  const p=d.map((v,i)=>[i/(d.length-1)*w,h-2-((v-mn)/r)*(h-4)]);
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}"><path d="${p.map((q,i)=>(i?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' ')}"
+    fill="none" stroke="${col||'var(--ss-purple)'}" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
+}
+/* ---------- KPI ---------- */
+function renderKPIs(){
+  let cards;
+  if(state.concept){
+    const c=CONCEPT[state.concept];
+    const k=c.kpi;
+    cards=[
+      {l:KLAB[0],v:String(c.oms),u:"MNOK",d:k[0][0],t:k[0][1],s:c.series},
+      {l:KLAB[1],v:c.mar.toFixed(1).replace('.',','),u:"%",d:k[1][0],t:k[1][1],s:c.series},
+      {l:KLAB[2],v:k[2][0],u:k[2][1],d:k[2][2],t:k[2][3],s:c.series},
+      {l:KLAB[3],v:k[3][0],u:k[3][1],d:k[3][2],t:k[3][3],s:c.series},
+      {l:KLAB[4],v:k[4][0],u:k[4][1],d:k[4][2],t:k[4][3],s:c.series},
+      {l:KLAB[5],v:k[5][0],u:k[5][1],d:k[5][2],t:k[5][3],s:c.series}
+    ];
+  } else { cards=KPI[state.period]; }
+  const col=state.concept?CONCEPT[state.concept].color:'var(--ss-purple)';
+  $("#kpis").innerHTML=cards.map(c=>`<div class="card kpi">
+    <div class="label">${c.l}</div>
+    <div class="value">${c.v} <small>${c.u}</small></div>
+    <div class="foot"><span class="delta ${c.t}">${c.d}</span>${spark(c.s,col)}</div></div>`).join("");
+}
+/* ---------- line chart ---------- */
+function renderLine(){
+  const el=$("#lineChart");
+  const W=Math.max(el.clientWidth||820,460),H=el.clientHeight||230,pad={l:38,r:12,t:12,b:22};
+  el.setAttribute("viewBox",`0 0 ${W} ${H}`); el.removeAttribute("preserveAspectRatio");
+  const iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+  const actual=state.concept?CONCEPT[state.concept].series:KPI.y[0].s;
+  const budget=state.concept?actual.map(v=>Math.round(v*CONCEPT[state.concept].bf)):BUDGET;
+  const col=state.concept?CONCEPT[state.concept].color:'var(--ss-purple)';
+  const all=[...actual,...budget], mx=Math.max(...all)*1.1, mn=Math.min(...all)*0.8;
+  const X=i=>pad.l+i/(MONTHS.length-1)*iw, Y=v=>pad.t+ih-((v-mn)/(mx-mn))*ih;
+  const line=a=>a.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ');
+  let g="";
+  for(let k=0;k<=4;k++){const val=mn+(mx-mn)*k/4,y=Y(val);
+    g+=`<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="#f0edf4"/>
+        <text x="${pad.l-7}" y="${y+3.5}" text-anchor="end" font-size="9.5" fill="#a8a8a7">${Math.round(val)}</text>`;}
+  MONTHS.forEach((m,i)=>{g+=`<text x="${X(i)}" y="${H-6}" text-anchor="middle" font-size="9.5" fill="#a8a8a7">${m}</text>`;});
+  const area=`M${X(0)} ${Y(actual[0])} `+actual.map((v,i)=>'L'+X(i)+' '+Y(v)).join(' ')+
+    ` L${X(MONTHS.length-1)} ${pad.t+ih} L${X(0)} ${pad.t+ih} Z`;
+  g+=`<path d="${area}" fill="${col}" fill-opacity="0.07"/>`;
+  g+=`<path d="${line(budget)}" fill="none" stroke="var(--ss-orange)" stroke-width="2" stroke-dasharray="5 4"/>`;
+  g+=`<path d="${line(actual)}" fill="none" stroke="${col}" stroke-width="2.6" stroke-linejoin="round"/>`;
+  actual.forEach((v,i)=>{g+=`<circle cx="${X(i)}" cy="${Y(v)}" r="10" fill="transparent" class="hot"
+    data-m="${MONTHS[i]}" data-a="${v}" data-b="${budget[i]}"/>
+    <circle cx="${X(i)}" cy="${Y(v)}" r="2.8" fill="${col}"/>`;});
+  el.innerHTML=g;
+  $("#legActual").style.background=col;
+  const tt=$("#tt");
+  el.querySelectorAll(".hot").forEach(c=>{
+    c.addEventListener("mousemove",ev=>{tt.innerHTML=`<b>${c.dataset.m}</b><br>Faktisk: ${c.dataset.a} MNOK<br>Budsjett: ${c.dataset.b} MNOK`;
+      tt.style.opacity=1;tt.style.left=(ev.clientX+14)+"px";tt.style.top=(ev.clientY-10)+"px";});
+    c.addEventListener("mouseleave",()=>tt.style.opacity=0);
+  });
+}
+/* ---------- concepts ---------- */
+function renderConcepts(){
+  const mx=Math.max(...ORDER.map(k=>CONCEPT[k].oms));
+  $("#concepts").innerHTML=ORDER.map(k=>{
+    const c=CONCEPT[k];
+    const lc=c.l4l>0?"pos":(c.l4l<0?"neg":"neu"), mc=c.mar>0?"pos":(c.mar<0?"neg":"neu");
+    return `<div class="concept ${state.concept===k?'sel':''}" data-k="${k}">
+      <div class="top"><span class="swatch" style="background:${c.color}"></span>
+        <span class="name">${c.name}</span>
+        <span class="right"><span>${c.st} steder</span><span><b>${c.oms}</b> MNOK</span>
+          <span class="pill ${mc}">${c.mar.toFixed(1).replace('.',',')} %</span>
+          <span class="pill ${lc}">${(c.l4l>0?'+':'')}${c.l4l.toFixed(1).replace('.',',')} % L4L</span></span></div>
+      <div class="bar"><span style="width:${(c.oms/mx*100).toFixed(1)}%;background:${c.color}"></span></div></div>`;
+  }).join("");
+}
+/* ---------- op ---------- */
+function renderOp(){
+  $("#opmetrics").innerHTML=OP.map(o=>{
+    const pct=Math.min(o.v/o.max*100,100),gp=o.goal/o.max*100;
+    const ok=o.inv?o.v<=o.goal:o.v>=o.goal, col=ok?"var(--green)":"var(--ss-orange)";
+    const vtxt=(o.u==="%"?o.v.toFixed(1).replace('.',','):o.v)+o.u;
+    return `<div class="row"><div class="lab">${o.l}</div>
+      <div class="track"><span style="width:${pct}%;background:${col}"></span><span class="goal" style="left:${gp}%"></span></div>
+      <div class="val">${vtxt}<br><small>${o.gl}</small></div></div>`;}).join("");
+}
+/* ---------- locations ---------- */
+function renderLoc(){
+  let rows=LOC.slice();
+  if(state.concept) rows=rows.filter(r=>r[1]===state.concept);
+  const sorted=rows.slice().sort((a,b)=>b[2]-a[2]);
+  const top=sorted.slice(0,5), bot=sorted.slice(-5).reverse();
+  const row=r=>`<tr><td><span class="loc-dot" style="background:${CCOL[r[1]]}"></span>${r[0]}</td>
+    <td class="r mono">${r[2].toFixed(1).replace('.',',')}</td>
+    <td class="r" style="color:${r[3]<0?'var(--ss-red)':'inherit'}">${(r[3]<0?'−':'')}${Math.abs(r[3]).toFixed(1).replace('.',',')} %</td></tr>`;
+  $("#locTop").innerHTML=top.length?top.map(row).join(""):`<tr><td class="empty">Ingen data</td></tr>`;
+  $("#locBot").innerHTML=(bot.length&&rows.length>1)?bot.map(row).join(""):(rows.length<=1?`<tr><td class="empty">—</td></tr>`:bot.map(row).join(""));
+  $("#locSub").textContent=state.concept?`${CONCEPT[state.concept].name} · omsetning hittil i år (MNOK)`:"Topp og svakeste steder · omsetning hittil i år (MNOK)";
+}
+/* ---------- alerts ---------- */
+function renderAlerts(){
+  let a=ALERTS;
+  if(state.concept) a=ALERTS.filter(x=>x[1]===state.concept||x[1]==="all");
+  $("#alerts").innerHTML=a.map(x=>`<div class="alert ${x[0]}"><span class="ic"></span>
+    <div class="txt"><b>${x[2]}</b><br>${x[3]}</div></div>`).join("");
+  $("#alertSub").textContent=state.concept?`Filtrert: ${CONCEPT[state.concept].name} + konsern`:"Krever oppfølging";
+}
+/* ---------- focus state ---------- */
+function setConcept(k){
+  state.concept=(state.concept===k)?null:k;
+  const chip=$("#focuschip"), per=$("#period");
+  if(state.concept){
+    chip.classList.add("on"); $("#focusname").textContent="Fokus: "+CONCEPT[state.concept].name;
+    $("#focusname").style.color=CONCEPT[state.concept].color;
+    per.classList.add("dim");
+    $("#chartTitle").textContent=CONCEPT[state.concept].name+" – omsetning mot budsjett";
+    $("#chartSub").textContent="Konsept · siste 12 måneder · MNOK";
+  } else {
+    chip.classList.remove("on"); per.classList.remove("dim");
+    $("#chartTitle").textContent="Omsetning mot budsjett";
+    $("#chartSub").textContent="Konsern · siste 12 måneder · MNOK";
+  }
+  renderKPIs();renderLine();renderConcepts();renderLoc();renderAlerts();
+}
+$("#concepts").addEventListener("click",e=>{const c=e.target.closest(".concept");if(c)setConcept(c.dataset.k);});
+$("#focusx").addEventListener("click",()=>setConcept(state.concept));
+$("#period").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||state.concept)return;
+  document.querySelectorAll("#period button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");state.period=b.dataset.p;renderKPIs();});
+
+/* init */
+renderKPIs();renderConcepts();renderOp();renderLoc();renderAlerts();
+requestAnimationFrame(renderLine);
+window.addEventListener("resize",renderLine);
+</script>
+</body>
+</html>
