@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude – Hjem (2028)</title>
+<style>
+  :root{
+    --bg:#FAF9F5;--sidebar:#F2F0E9;--sidebar-border:#E6E3D9;--ink:#262624;--ink-soft:#605F5A;
+    --ink-faint:#8C8A82;--clay:#D97757;--clay-deep:#C15F3C;--line:#E8E5DC;--card:#FFFFFF;
+    --green:#3E7C5A;--green-bg:#E3F0E8;--amber:#C15F3C;--amber-bg:#FBEFE2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.55;}
+  .app{display:flex;height:100vh;width:100%;overflow:hidden;}
+
+  /* Sidebar */
+  .sidebar{width:264px;flex-shrink:0;background:var(--sidebar);border-right:1px solid var(--sidebar-border);display:flex;flex-direction:column;padding:14px 12px;}
+  .brand{display:flex;align-items:center;gap:9px;padding:6px 8px 18px 8px;}
+  .brand .star{width:22px;height:22px;}
+  .brand .wordmark{font-size:20px;font-weight:600;letter-spacing:-0.01em;}
+  .newchat{display:flex;align-items:center;gap:10px;background:var(--clay);color:#fff;border:none;border-radius:10px;padding:9px 12px;font-size:14px;font-weight:500;cursor:pointer;width:100%;margin-bottom:8px;}
+  .newchat svg{width:16px;height:16px;}
+  .nav-item{display:flex;align-items:center;gap:11px;padding:8px 10px;border-radius:8px;color:var(--ink-soft);font-size:14px;cursor:pointer;}
+  .nav-item.active{background:#E3DFD3;color:var(--ink);font-weight:500;}
+  .nav-item svg{width:16px;height:16px;opacity:.78;}
+  .nav-item:hover{background:#EAE7DE;}
+  .sect-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);padding:18px 10px 6px 10px;}
+  .recent{padding:7px 10px;border-radius:8px;font-size:13.5px;color:var(--ink-soft);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .recent:hover{background:#EAE7DE;}
+
+  .conn-box{margin-top:14px;border:1px solid var(--sidebar-border);border-radius:10px;padding:10px 11px;background:#FCFBF7;}
+  .conn-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .conn-title svg{width:13px;height:13px;color:var(--clay);}
+  .conn-row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft);padding:2.5px 0;}
+  .conn-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;}
+
+  .sidebar-foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:8px 10px;}
+  .avatar{width:28px;height:28px;border-radius:50%;background:#7A5C4E;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;}
+  .acct{font-size:13px;color:var(--ink-soft);line-height:1.3;}
+  .acct b{display:block;color:var(--ink);font-weight:600;font-size:13px;}
+
+  /* Main */
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .scroll{flex:1;overflow-y:auto;}
+  .home{max-width:780px;margin:0 auto;padding:48px 28px 80px;}
+
+  /* Hero */
+  .hero-star{width:34px;height:34px;margin-bottom:16px;}
+  .greet{font-size:30px;font-weight:600;letter-spacing:-0.02em;color:var(--ink);}
+  .greet .sub{display:block;font-size:15px;font-weight:400;color:var(--ink-faint);margin-top:5px;letter-spacing:0;}
+
+  .ask{margin:22px 0 8px;background:var(--card);border:1px solid var(--line);border-radius:18px;
+    box-shadow:0 4px 18px rgba(60,55,45,.06);padding:15px 18px 12px;}
+  .ask .ph{color:var(--ink-faint);font-size:15.5px;}
+  .ask .row{display:flex;align-items:center;margin-top:12px;}
+  .ask .row .ico{width:18px;height:18px;color:var(--ink-faint);margin-right:14px;}
+  .ask .send{margin-left:auto;width:30px;height:30px;border-radius:9px;background:var(--clay);display:flex;align-items:center;justify-content:center;}
+  .ask .send svg{width:15px;height:15px;color:#fff;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:34px;}
+  .chip{font-size:13px;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);
+    border-radius:20px;padding:7px 13px;cursor:pointer;display:flex;align-items:center;gap:7px;}
+  .chip:hover{background:#F4F1E9;}
+  .chip svg{width:13px;height:13px;color:var(--clay);}
+
+  /* Sections */
+  .sec{margin-bottom:30px;}
+  .sec-h{display:flex;align-items:baseline;gap:9px;margin-bottom:13px;}
+  .sec-h h2{font-size:16px;font-weight:600;color:var(--ink);}
+  .sec-h .count{font-size:12.5px;color:var(--ink-faint);}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px;}
+  .stack > .card{margin-bottom:10px;}
+
+  /* decision card */
+  .dec{display:flex;align-items:flex-start;gap:13px;}
+  .dec .ic{width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .dec .ic svg{width:17px;height:17px;}
+  .ic.amber{background:var(--amber-bg);color:var(--amber);}
+  .ic.clay{background:#F6E4DA;color:var(--clay-deep);}
+  .dec .body{flex:1;min-width:0;}
+  .dec .t{font-weight:600;color:var(--ink);font-size:14.5px;}
+  .dec .d{font-size:13.5px;color:var(--ink-soft);margin-top:2px;}
+  .dec .src{font-size:12px;color:var(--ink-faint);margin-top:5px;}
+  .dec .actions{display:flex;gap:8px;margin-top:11px;}
+  .btn{font-size:13px;font-weight:500;border-radius:8px;padding:7px 14px;cursor:pointer;border:1px solid transparent;}
+  .btn-primary{background:var(--clay);color:#fff;}
+  .btn-primary:hover{background:var(--clay-deep);}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink-soft);}
+  .btn-ghost:hover{background:#F4F1E9;}
+
+  /* day stats grid */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+  .stat .lbl{font-size:12.5px;color:var(--ink-faint);display:flex;align-items:center;gap:7px;margin-bottom:6px;}
+  .stat .lbl svg{width:14px;height:14px;color:var(--clay);}
+  .stat .val{font-size:21px;font-weight:600;color:var(--ink);letter-spacing:-0.01em;}
+  .stat .meta{font-size:13px;color:var(--ink-soft);margin-top:3px;}
+  .stat .meta b{color:var(--green);font-weight:600;}
+
+  /* done card (mens du sov) */
+  .done{display:flex;align-items:flex-start;gap:12px;}
+  .done .chk{width:22px;height:22px;border-radius:50%;background:var(--green-bg);color:var(--green);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  .done .chk svg{width:13px;height:13px;}
+  .done .t{font-size:14px;color:var(--ink);}
+  .done .t b{font-weight:600;}
+  .done .ts{font-size:12px;color:var(--ink-faint);margin-top:2px;}
+
+  .insight{background:#F4F1E9;border-left:3px solid var(--clay);border-radius:0 10px 10px 0;
+    padding:13px 16px;font-size:13.5px;color:var(--ink-soft);margin-top:6px;}
+  .insight b{color:var(--ink);}
+
+  .footline{text-align:center;font-size:12px;color:var(--ink-faint);margin-top:38px;
+    border-top:1px solid var(--line);padding-top:18px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="star" viewBox="0 0 24 24"><path fill="#D97757" d="M12 1.5l1.9 6.3 6.3-1.9-4.4 4.7 4.6 4.6-6.5-1.8L12 22.5l-1.9-6.6-6.5 1.8 4.6-4.6L3.8 6l6.3 1.9z"/></svg>
+      <span class="wordmark">Claude</span>
+    </div>
+    <button class="newchat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Ny samtale
+    </button>
+    <div class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/></svg>
+      Hjem
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+      Søk
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>
+      Automatiseringer
+    </div>
+
+    <div class="sect-label">I dag</div>
+    <div class="recent">Vaktplan – helgen</div>
+    <div class="recent">Salget så langt i juni</div>
+    <div class="recent">Reklamasjon bord 12</div>
+    <div class="recent">Sommermeny – siste utkast</div>
+
+    <div class="conn-box">
+      <div class="conn-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2v6M15 2v6M7 8h10v3a5 5 0 01-10 0z"/><path d="M12 16v6"/></svg>
+        Tilkoblet
+      </div>
+      <div class="conn-row"><span class="conn-dot"></span> POS — kasse &amp; salg</div>
+      <div class="conn-row"><span class="conn-dot"></span> CRM — booking &amp; gjest</div>
+      <div class="conn-row"><span class="conn-dot"></span> ERP — lager &amp; innkjøp</div>
+      <div class="conn-row"><span class="conn-dot"></span> HR — vakt &amp; timer</div>
+      <div class="conn-row"><span class="conn-dot"></span> Regnskap</div>
+      <div class="conn-row"><span class="conn-dot"></span> Leverandørportal</div>
+      <div class="conn-row"><span class="conn-dot"></span> Slack</div>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar">M</div>
+      <div class="acct"><b>Mari Sunde</b>Daglig leder · Bergen sentrum</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="scroll">
+      <div class="home">
+
+        <!-- HERO -->
+        <svg class="hero-star" viewBox="0 0 24 24"><path fill="#D97757" d="M12 1.5l1.9 6.3 6.3-1.9-4.4 4.7 4.6 4.6-6.5-1.8L12 22.5l-1.9-6.6-6.5 1.8 4.6-4.6L3.8 6l6.3 1.9z"/></svg>
+        <div class="greet">
+          God morgen, Mari
+          <span class="sub">Torsdag 8. juni 2028 · Bitastad Bergen sentrum · 142 gjester booket i dag</span>
+        </div>
+
+        <div class="ask">
+          <div class="ph">Hva vil du gjøre i dag?</div>
+          <div class="row">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15V8a2 2 0 00-2-2h-3l-2-2H6a2 2 0 00-2 2v9"/><path d="M12 11v6M9 14h6"/></svg>
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 2v6M15 2v6M7 8h10v3a5 5 0 01-10 0z"/><path d="M12 16v6"/></svg>
+            <div class="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
+          </div>
+        </div>
+        <div class="chips">
+          <div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Sett opp dagens bemanning</div>
+          <div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/></svg> Hvordan går salget?</div>
+          <div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg> Finn alt om reklamasjonen i går</div>
+        </div>
+
+        <!-- TRENGER EN AVGJØRELSE -->
+        <div class="sec">
+          <div class="sec-h"><h2>Trenger en avgjørelse fra deg</h2><span class="count">3 saker</span></div>
+          <div class="stack">
+
+            <div class="card dec">
+              <div class="ic clay">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.6L23 6H6"/></svg>
+              </div>
+              <div class="body">
+                <div class="t">Helgebestilling klar til å sendes</div>
+                <div class="d">Kylling, pommes og fat-øl fyller opp før helgens 182 bookinger. Sum 4 240 kr, levering torsdag.</div>
+                <div class="src">Bygget fra CRM · POS · ERP — venter på din godkjenning</div>
+                <div class="actions">
+                  <button class="btn btn-primary">Godkjenn og send</button>
+                  <button class="btn btn-ghost">Se detaljer</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card dec">
+              <div class="ic amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+              </div>
+              <div class="body">
+                <div class="t">Lørdagsvakt 18–23 mangler dekning</div>
+                <div class="d">En i serveringen meldte forfall. Claude fant to ledige med riktig kompetanse — begge har sagt ja til ekstravakter før.</div>
+                <div class="src">Fra HR · vaktplan — 2 forslag klare</div>
+                <div class="actions">
+                  <button class="btn btn-primary">Se forslag</button>
+                  <button class="btn btn-ghost">Løs selv</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card dec">
+              <div class="ic amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M10.3 3.3l-8 14A1.5 1.5 0 003.6 20h16.8a1.5 1.5 0 001.3-2.3l-8-14a1.5 1.5 0 00-2.6 0z"/><path d="M12 9v4M12 16v.5"/></svg>
+              </div>
+              <div class="body">
+                <div class="t">Prisavvik flagget: Vestmat kylling +9 %</div>
+                <div class="d">Faktisk pris ligger over avtalen. Claude har laget forhandlingsnotat og foreslår å ta det opp før neste bestilling.</div>
+                <div class="src">Fra ERP · leverandørportal</div>
+                <div class="actions">
+                  <button class="btn btn-primary">Åpne sak</button>
+                  <button class="btn btn-ghost">Utsett</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- DAGEN I DAG -->
+        <div class="sec">
+          <div class="sec-h"><h2>Dagen i dag</h2></div>
+          <div class="grid">
+            <div class="card stat">
+              <div class="lbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/></svg> Gjester</div>
+              <div class="val">142 booket</div>
+              <div class="meta">Lunsj 38 · Middag 104. <b>+12 %</b> mot snitt-torsdag.</div>
+            </div>
+            <div class="card stat">
+              <div class="lbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Bemanning</div>
+              <div class="val">9 på vakt</div>
+              <div class="meta">Kjøkken 4 · Servering 4 · Bar 1. <b>Dekket</b>, utenom lør 18–23.</div>
+            </div>
+            <div class="card stat">
+              <div class="lbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM18.5 21a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/></svg> Leveranser</div>
+              <div class="val">2 i dag</div>
+              <div class="meta">Fjordkjøtt 09:00 · Bama 11:30. Begge bekreftet.</div>
+            </div>
+            <div class="card stat">
+              <div class="lbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></svg> Vær &amp; uteservering</div>
+              <div class="val">19 °C, sol</div>
+              <div class="meta">Claude foreslår: åpne uteserveringen og sett <b>+1 i baren</b> til kveld.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MENS DU SOV -->
+        <div class="sec">
+          <div class="sec-h"><h2>Claude ordnet i natt</h2><span class="count">på dine faste regler</span></div>
+          <div class="stack">
+            <div class="card done">
+              <div class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+              <div>
+                <div class="t"><b>Ukesrapport</b> sendt til regionsjef med tall fra POS og regnskap.</div>
+                <div class="ts">06:40 · godkjent automatisk (innenfor dine regler)</div>
+              </div>
+            </div>
+            <div class="card done">
+              <div class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+              <div>
+                <div class="t"><b>Menytekster</b> oppdatert etter ny allergeninfo fra leverandør — sendt til kjøkkensjef for kontroll.</div>
+                <div class="ts">05:15 · venter på fagkontroll før publisering</div>
+              </div>
+            </div>
+            <div class="card done">
+              <div class="chk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+              <div>
+                <div class="t"><b>Timelister</b> for forrige uke kontrollert mot vaktplan — 2 avvik flagget til lønn.</div>
+                <div class="ts">04:50 · sendt til HR</div>
+              </div>
+            </div>
+          </div>
+          <div class="insight">
+            <b>Et rolig bilde i dag.</b> Salget ligger foran budsjett, alt er dekket utenom én kveldsvakt, og det eneste som virkelig haster er prisavviket fra Vestmat. Vil du at jeg tar det først?
+          </div>
+        </div>
+
+        <div class="footline">
+          Claude er arbeidsflaten din på tvers av alle systemene. Snakk med kollegaene i Slack — alt det andre starter her.
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
